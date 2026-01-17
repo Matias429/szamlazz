@@ -1,1 +1,3 @@
-# szamlazz
+# Szamlazz
+
+Backend for interview task
