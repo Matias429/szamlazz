@@ -1,11 +1,13 @@
-package hu.mbalazs.szamlazz.xmlhandling;
+package hu.mbalazs.szamlazz.services;
 
-import hu.mbalazs.szamlazz.PaymentItem;
-import hu.mbalazs.szamlazz.PaymentMethods;
-import hu.mbalazs.szamlazz.ReceiptItem;
+import hu.mbalazs.szamlazz.dtos.PaymentItemsDto;
+import hu.mbalazs.szamlazz.dtos.ReceiptItemsDto;
+import hu.mbalazs.szamlazz.helpers.PaymentMethods;
+import hu.mbalazs.szamlazz.helpers.XmlOutputProperties;
 import org.springframework.stereotype.Service;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.Transformer;
@@ -17,16 +19,16 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class XmlWriterService {
+public class XmlGeneratorService {
 
     private final XmlOutputProperties xmlOutputProperties;
 
-    public XmlWriterService(XmlOutputProperties xmlOutputProperties) {
+    public XmlGeneratorService(XmlOutputProperties xmlOutputProperties) {
         this.xmlOutputProperties = xmlOutputProperties;
     }
 
-    public String createReceipt(Boolean pdfLetoltes, String elotag, PaymentMethods fizmod, String penznem, String hivasazonosito,
-                                Optional<String> megjegyes, List<ReceiptItem> tetelek, List<PaymentItem> kifizetesek) {
+    public String parseDataToXml(String hivasazonosito, Boolean pdfLetoltes, String elotag, PaymentMethods fizmod, String penznem,
+                                 Optional<String> megjegyes, List<ReceiptItemsDto.ReceiptItemDto> tetelek, Optional<List<PaymentItemsDto.PaymentItemDto>> kifizetesek) {
         try {
             Document document = DocumentBuilderFactory
                     .newInstance()
@@ -73,7 +75,7 @@ public class XmlWriterService {
 
             // Tetelek
             Element tetelekElement = document.createElement("tetelek");
-            for (ReceiptItem item : tetelek) {
+            for (ReceiptItemsDto.ReceiptItemDto item : tetelek) {
                 Element tetel = document.createElement("tetel");
 
                 Element megnevezes = document.createElement("megnevezes");
@@ -115,18 +117,20 @@ public class XmlWriterService {
             // Kifizetesek
             Element kifizetesekElement = document.createElement("kifizetesek");
 
-            for (PaymentItem payment : kifizetesek) {
-                Element kifizetes = document.createElement("kifizetes");
+            if (kifizetesek.isPresent()) {
+                for (PaymentItemsDto.PaymentItemDto payment : kifizetesek.get()) {
+                    Element kifizetes = document.createElement("kifizetes");
 
-                Element fizetoeszkoz = document.createElement("fizetoeszkoz");
-                fizetoeszkoz.setTextContent(payment.getFizetoeszkoz());
-                kifizetes.appendChild(fizetoeszkoz);
+                    Element fizetoeszkoz = document.createElement("fizetoeszkoz");
+                    fizetoeszkoz.setTextContent(payment.getFizetoeszkoz());
+                    kifizetes.appendChild(fizetoeszkoz);
 
-                Element osszeg = document.createElement("osszeg");
-                osszeg.setTextContent(payment.getOsszeg().toString());
-                kifizetes.appendChild(osszeg);
+                    Element osszeg = document.createElement("osszeg");
+                    osszeg.setTextContent(payment.getOsszeg().toString());
+                    kifizetes.appendChild(osszeg);
 
-                kifizetesekElement.appendChild(kifizetes);
+                    kifizetesekElement.appendChild(kifizetes);
+                }
             }
 
             nyugtaCreate.appendChild(kifizetesekElement);

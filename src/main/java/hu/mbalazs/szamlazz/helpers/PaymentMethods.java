@@ -1,4 +1,4 @@
-package hu.mbalazs.szamlazz;
+package hu.mbalazs.szamlazz.helpers;
 
 public enum PaymentMethods {
     TRANSFER("átutalás"),

@@ -1,0 +1,30 @@
+<xmlnyugtavalasz xmlns="http://www.szamlazz.hu/xmlnyugtavalasz">
+    <sikeres>true</sikeres>
+    <nyugta>
+        <alap>
+            <hivasAzonosito>CID123</hivasAzonosito>
+            <nyugtaszam>TESZT-001</nyugtaszam>
+            <tipus>NY</tipus>
+            <stornozott>false</stornozott>
+            <kelt>2026-01-18</kelt>
+            <fizmod>készpénz</fizmod>
+            <penznem>HUF</penznem>
+        </alap>
+        <tetelek>
+            <tetel>
+                <megnevezes>Termék 1</megnevezes>
+                <mennyiseg>1</mennyiseg>
+                <netto>1000</netto>
+                <afa>270</afa>
+                <brutto>1270</brutto>
+            </tetel>
+        </tetelek>
+        <osszegek>
+            <totalossz>
+                <netto>1000</netto>
+                <afa>270</afa>
+                <brutto>1270</brutto>
+            </totalossz>
+        </osszegek>
+    </nyugta>
+</xmlnyugtavalasz>

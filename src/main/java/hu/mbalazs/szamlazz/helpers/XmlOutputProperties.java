@@ -1,15 +1,14 @@
-package hu.mbalazs.szamlazz.xmlhandling;
+package hu.mbalazs.szamlazz.helpers;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
+@Getter
+@Setter
 @Configuration
 @ConfigurationProperties(prefix = "xml.output")
 public class XmlOutputProperties {
     private String agentId;
-
-    public String getAgentId() { return this.agentId;}
-    public void setAgentId(String agentId) { this.agentId = agentId; }
-
-
 }
