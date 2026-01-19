@@ -1,0 +1,132 @@
+:host {
+  min-height: 100vh;
+  padding: 1rem;
+  box-sizing: border-box;
+  
+  mat-card {
+    background: linear-gradient(135deg, 
+      var(--mdc-primary-container, #b2ebf2) 0%, 
+      var(--mdc-surface, #ffffff) 100%);
+    border-radius: clamp(12px, 4vw, 20px) !important;
+    box-shadow: 0 clamp(8px, 3vw, 12px) clamp(20px, 8vw, 40px) rgba(0, 188, 212, 0.2);
+    border: 1px solid rgba(0, 188, 212, 0.25);
+    overflow: hidden;
+    transition: all 0.3s ease;
+    
+    width: 100%;
+    max-width: 80%;
+    margin: clamp(1rem, 4vw, 2rem) auto;
+    
+    &:hover {
+      box-shadow: 0 clamp(12px, 5vw, 20px) clamp(30px, 12vw, 60px) rgba(0, 188, 212, 0.3);
+    }
+  }
+
+  .mat-mdc-card-header {
+    background: linear-gradient(90deg, 
+      var(--mdc-primary, #00bcd4), 
+      var(--mdc-secondary, #ff9800));
+    padding: clamp(1.5rem, 5vw, 2rem);
+    position: relative;
+    
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: clamp(4px, 1.5vw, 6px);
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.8), transparent);
+    }
+  }
+
+  mat-card-title {
+    color: white !important;
+    font-size: clamp(1.5rem, 6vw, 2.25rem);
+    font-weight: 800;
+    text-shadow: 0 clamp(2px, 1vw, 4px) clamp(4px, 2vw, 8px) rgba(0,0,0,0.3);
+    margin: 0;
+    letter-spacing: clamp(-0.02em, -0.5vw, -0.025em);
+  }
+}
+
+// Dynamic form sections
+.form-section {
+  margin: clamp(2rem, 6vw, 3rem) 0;
+  
+  h3 {
+    color: var(--mdc-primary, #00bcd4);
+    margin-bottom: clamp(1rem, 4vw, 1.5rem);
+    font-size: clamp(1.25rem, 5vw, 1.75rem);
+  }
+}
+
+// PERFECT FLUID GRID SYSTEM
+.form-grid, .item-grid {
+  display: grid;
+  gap: clamp(1rem, 4vw, 1.5rem);
+  
+  // Dynamic columns: 1-6 based on screen size
+  grid-template-columns: repeat(auto-fit, minmax(clamp(200px, 20vw, 280px), 1fr));
+}
+
+// Full width spans all columns
+.full-width {
+  grid-column: 1 / -1;
+}
+
+// Dynamic item groups
+.items-list {
+  margin-top: clamp(1rem, 4vw, 1.5rem);
+  
+  .item-group {
+    background: rgba(0, 188, 212, 0.05);
+    border: 1px solid rgba(0, 188, 212, 0.2);
+    border-radius: clamp(8px, 3vw, 12px);
+    padding: clamp(1rem, 4vw, 1.5rem);
+    margin-bottom: clamp(0.75rem, 3vw, 1rem);
+  }
+}
+
+// Dynamic nav bar (your existing nav-bar)
+.nav-bar {
+  display: flex;
+  gap: clamp(0.75rem, 3vw, 1rem);
+  justify-content: center;
+  padding: clamp(1.5rem, 6vw, 2rem);
+  
+  @media (max-width: 768px) {
+    flex-direction: column;
+    
+    .nav-btn {
+      width: 100%;
+      max-width: clamp(250px, 80vw, 400px);
+      margin: 0 auto;
+    }
+  }
+}
+
+// Perfect form field sizing
+mat-form-field {
+  .mat-mdc-form-field {
+    font-size: clamp(0.875rem, 3vw, 1rem);
+  }
+}
+
+// Ultra-responsive breakpoints
+@media (max-width: 480px) {
+  :host {
+    padding: 0.5rem;
+  }
+  
+  mat-card {
+    margin: 0.5rem;
+    border-radius: 12px !important;
+  }
+}
+
+@media (min-width: 1200px) {
+  .form-grid, .item-grid {
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  }
+}

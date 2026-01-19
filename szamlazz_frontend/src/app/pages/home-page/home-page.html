@@ -1,0 +1,57 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>Nyugták ({{ receipts().length }})</mat-card-title>
+  </mat-card-header>
+  
+  <mat-card-content>
+    @if (receipts().length === 0) {
+      <div class="no-data">Nincsenek nyugták</div>
+    } @else {
+      <table mat-table [dataSource]="receipts()" class="mat-elevation-z8">
+
+        <!-- Nyugtaszam Column -->
+        <ng-container matColumnDef="nyugtaszam">
+          <th mat-header-cell *matHeaderCellDef>Nyugtaszám</th>
+          <td mat-cell *matCellDef="let receipt"> {{ receipt.alap.nyugtaszam }} </td>
+        </ng-container>
+
+        <!-- Kelt Column -->
+        <ng-container matColumnDef="kelt">
+          <th mat-header-cell *matHeaderCellDef>Keltezés</th>
+          <td mat-cell *matCellDef="let receipt"> {{ receipt.alap.kelt }} </td>
+        </ng-container>
+
+        <!-- Netto Osszeg Column-->
+        <ng-container matColumnDef="nettoOsszeg">
+          <th mat-header-cell *matHeaderCellDef>Teljes Nettó Összeg</th>
+          <td mat-cell *matCellDef="let receipt"> {{ receipt.osszegek.totalossz.netto }} {{ receipt.alap.penznem }}</td>
+        </ng-container>
+
+        <!-- Brutto Osszeg Column-->
+        <ng-container matColumnDef="bruttoOsszeg">
+          <th mat-header-cell *matHeaderCellDef>Teljes Bruttó Összeg</th>
+          <td mat-cell *matCellDef="let receipt"> {{ receipt.osszegek.totalossz.brutto }} {{ receipt.alap.penznem }}</td>
+        </ng-container>
+
+        <!-- Header and Row Definitions -->
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row 
+            *matRowDef="let row; columns: displayedColumns;" 
+            class="receipt-row"
+            style="cursor: pointer;"
+            (click)="goToDetails(row.alap.hivasAzonosito)">
+        </tr>
+      </table>
+    }
+  </mat-card-content>
+</mat-card>
+
+<div class="nav-bar">
+  <button mat-raised-button 
+          color="primary" 
+          routerLink="/create"
+          class="nav-btn primary">
+    <mat-icon>add</mat-icon>
+    Új nyugta
+  </button>
+</div>

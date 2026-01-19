@@ -1,0 +1,119 @@
+:host ::ng-deep {
+  .mat-mdc-header-cell {
+    background-color: var(--mdc-primary, #00bcd4) !important;
+    color: white !important;
+    font-weight: 600;
+    border-bottom: 2px solid rgba(0, 188, 212, 0.2);
+  }
+
+  .mat-mdc-row:hover {
+    background-color: rgba(255, 152, 0, 0.08) !important;
+  }
+
+  .mat-mdc-row:nth-child(even) {
+    background-color: rgba(0, 0, 0, 0.02);
+  }
+
+  .status-cancelled {
+    color: var(--mdc-error, #f44336) !important;
+    font-weight: 500;
+  }
+  
+  .status-active {
+    color: var(--mdc-primary, #00bcd4) !important;
+  }
+
+  .no-data {
+    font-size: 1.125rem;
+    font-weight: 400;
+    text-align: center;
+    padding: 3rem;
+    color: rgba(0, 0, 0, 0.6);
+    line-height: 1.4;
+  }
+
+  .mat-mdc-table {
+    font-size: 0.875rem;
+  }
+
+  .mat-mdc-cell, .mat-mdc-header-cell {
+    padding: 12px 16px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+  }
+  
+}
+
+:host ::ng-deep {
+  mat-card {
+    background: linear-gradient(135deg, 
+      var(--mdc-primary-container, #b2ebf2) 0%, 
+      var(--mdc-surface, #ffffff) 100%);
+    border-radius: 16px !important;
+    box-shadow: 0 8px 32px rgba(0, 188, 212, 0.15);
+    border: 1px solid rgba(0, 188, 212, 0.2);
+    overflow: hidden;
+    transition: all 0.3s ease;
+    
+    &:hover {
+      box-shadow: 0 12px 48px rgba(0, 188, 212, 0.25);
+    }
+  }
+
+  .mat-mdc-card-header {
+    background: linear-gradient(90deg, 
+      var(--mdc-primary, #00bcd4), 
+      var(--mdc-secondary, #ff9800));
+    padding: 1.5rem;
+    position: relative;
+    
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent);
+    }
+  }
+
+  mat-card-title {
+    color: white !important;
+    font-size: 1.75rem;
+    font-weight: 700;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    margin: 0;
+  }
+
+  // Card content padding
+  .mat-mdc-card-content {
+    padding: 2rem;
+  }
+
+  // Table container
+  mat-card-content > div {
+    border-radius: 12px;
+    overflow: hidden;
+  }
+}
+
+// Responsive card
+@media (max-width: 768px) {
+  ::ng-deep mat-card {
+    margin: 1rem;
+    border-radius: 12px;
+  }
+  
+  ::ng-deep mat-card-title {
+    font-size: 1.5rem;
+  }
+}
+
+
+@media (max-width: 768px) {
+  ::ng-deep .mat-mdc-header-cell,
+  ::ng-deep .mat-mdc-cell {
+    padding: 8px 12px;
+    font-size: 0.8rem;
+  }
+}

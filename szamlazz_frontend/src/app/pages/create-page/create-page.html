@@ -1,0 +1,159 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>Új nyugta létrehozása</mat-card-title>
+  </mat-card-header>
+
+  <mat-card-content>
+    <form [formGroup]="form" (ngSubmit)="submit()">
+      <!-- Basic Info -->
+      <div class="form-section">
+        <h3>Alapadatok</h3>
+        <div class="form-grid">
+          <mat-form-field>
+            <mat-label>Előtag</mat-label>
+            <input matInput formControlName="elotag">
+          </mat-form-field>
+
+          <mat-form-field>
+            <mat-label>Fizetési mód</mat-label>
+            <mat-select formControlName="fizmod">
+              @for (option of fizmodOptions; track option) {
+                <mat-option [value]="option">{{ option }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field>
+            <mat-label>Pénznem</mat-label>
+            <mat-select formControlName="penznem">
+              @for (option of penznemOptions; track option) {
+                <mat-option [value]="option">{{ option }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+
+          <mat-checkbox formControlName="pdfLetoltes">PDF letöltés</mat-checkbox>
+
+          <mat-form-field class="full-width">
+            <mat-label>Megjegyzés</mat-label>
+            <textarea matInput formControlName="megjegyzes" rows="3"></textarea>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <!-- Items -->
+      <div class="form-section">
+        <h3>Tételek</h3>
+        <button type="button" mat-stroked-button (click)="addTetel()" color="primary">
+          <mat-icon>add</mat-icon> Új tétel
+        </button>
+        
+        <div formArrayName="tetelek" class="items-list">
+          @for (tetel of tetelekArray.controls; track tetel; let i = $index) {
+            <div [formGroupName]="i" class="item-group">
+              <div class="item-grid">
+                <mat-form-field>
+                  <mat-label>Megnevezés</mat-label>
+                  <input matInput formControlName="megnevezes">
+                </mat-form-field>
+                
+                <mat-form-field>
+                  <mat-label>Mennyiség</mat-label>
+                  <input matInput type="number" formControlName="mennyiseg" step="0.01">
+                </mat-form-field>
+                
+                <mat-form-field>
+                  <mat-label>Egység</mat-label>
+                  <mat-select formControlName="mennyisegiEgyseg">
+                    @for (eg of mennyisegEgysegek; track eg) {
+                      <mat-option [value]="eg">{{ eg }}</mat-option>
+                    }
+                  </mat-select>
+                </mat-form-field>
+                
+                <mat-form-field>
+                  <mat-label>Nettó egységár</mat-label>
+                  <input matInput type="number" formControlName="nettoEgysegar">
+                </mat-form-field>
+                
+                <mat-form-field>
+                    <mat-label>ÁFA kulcs</mat-label>
+                    <mat-select formControlName="afakulcs">
+                        @for (afa of afakulcsOptions; track afa) {
+                        <mat-option [value]="afa">{{ afa }}</mat-option>
+                        }
+                    </mat-select>
+                </mat-form-field>
+
+                <mat-form-field>
+                    <mat-label>Nettó Összeg</mat-label>
+                        <input matInput type="number" formControlName="netto" readonly>
+                    <mat-hint>Automatikusan számolva</mat-hint>
+                </mat-form-field>
+
+                <mat-form-field>
+                    <mat-label>ÁFA Összeg</mat-label>
+                        <input matInput type="number" formControlName="afa" readonly>
+                </mat-form-field>
+
+                <mat-form-field>
+                    <mat-label>Bruttó Összeg</mat-label>
+                        <input matInput type="number" formControlName="brutto" readonly style="font-weight: bold;">
+                </mat-form-field>
+                
+                <button type="button" mat-icon-button (click)="removeTetel(i)">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+
+      <!-- Payments -->
+      <div class="form-section">
+        <h3>Kifizetések</h3>
+        <button type="button" mat-stroked-button (click)="addKifizetes()" color="primary">
+          <mat-icon>add</mat-icon> Új kifizetés
+        </button>
+        
+        <div formArrayName="kifizetesek" class="items-list">
+          @for (kifizetes of kifizetesekArray.controls; track kifizetes; let i = $index) {
+            <div [formGroupName]="i" class="item-group">
+              <div class="item-grid">
+                <mat-form-field>
+                  <mat-label>Fizetőeszköz</mat-label>
+                  <input matInput formControlName="fizetoeszkoz">
+                </mat-form-field>
+                
+                <mat-form-field>
+                  <mat-label>Összeg</mat-label>
+                  <input matInput type="number" formControlName="osszeg">
+                </mat-form-field>
+                
+                <button type="button" mat-icon-button (click)="removeKifizetes(i)">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+
+      <!-- Navigation (your existing nav-bar) -->
+      <div class="nav-bar">
+        <button mat-raised-button color="primary" routerLink="/home">
+          <mat-icon>arrow_back</mat-icon>
+          Vissza
+        </button>
+        <button mat-raised-button 
+                color="accent" 
+                type="submit" 
+                [disabled]="form.invalid || form.get('tetelek')?.errors?.['atLeastOneTetel']">
+          <mat-icon>send</mat-icon>
+          Létrehozás
+        </button>
+      </div>
+    </form>
+  </mat-card-content>
+</mat-card>
