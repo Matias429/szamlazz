@@ -17,6 +17,7 @@ public class XmlParserService {
             ResponseDto response = (ResponseDto) unmarshaller.unmarshal(new StringReader(xml));
 
             if (Boolean.FALSE.equals(response.getSikeres())) {
+                System.out.println(response);
                 throw new IllegalStateException("Számlázz.hu response was not successful");
             }
 

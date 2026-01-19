@@ -17,14 +17,6 @@ public class PaymentItemsDto {
     @Data
     @XmlAccessorType(XmlAccessType.FIELD)
     public static class PaymentItemDto {
-
-        public PaymentItemDto(String fizetoeszkoz, Double osszeg) {
-            this.fizetoeszkoz = fizetoeszkoz;
-            this.osszeg = osszeg;
-        }
-
-        public PaymentItemDto(){}
-
         private String fizetoeszkoz;
         private Double osszeg;
     }

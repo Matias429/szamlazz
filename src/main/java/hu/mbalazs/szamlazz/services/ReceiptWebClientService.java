@@ -2,7 +2,6 @@ package hu.mbalazs.szamlazz.services;
 
 import hu.mbalazs.szamlazz.dtos.PaymentItemsDto;
 import hu.mbalazs.szamlazz.dtos.ReceiptItemsDto;
-import hu.mbalazs.szamlazz.helpers.PaymentMethods;
 import org.springframework.http.MediaType;
 import org.springframework.http.client.MultipartBodyBuilder;
 import org.springframework.stereotype.Service;
@@ -25,9 +24,8 @@ public class ReceiptWebClientService {
         this.xmlGeneratorService = xmlGeneratorService;
     }
 
-    public String createReceipt(String hivasazonosito, Boolean pdfLetoltes, String elotag, PaymentMethods fizmod, String penznem, Optional<String> megjegyzes,
+    public String createReceipt(String hivasazonosito, Boolean pdfLetoltes, String elotag, String fizmod, String penznem, Optional<String> megjegyzes,
                                 List<ReceiptItemsDto.ReceiptItemDto> tetelek, Optional<List<PaymentItemsDto.PaymentItemDto>> kifizetesek) {
-
 
         String xml = xmlGeneratorService.parseDataToXml(hivasazonosito, pdfLetoltes, elotag, fizmod, penznem, megjegyzes, tetelek, kifizetesek);
         MultipartBodyBuilder bodyBuilder = new MultipartBodyBuilder();
@@ -36,7 +34,7 @@ public class ReceiptWebClientService {
                 .filename("nyugta.xml")
                 .contentType(MediaType.APPLICATION_XML);
 
-        System.out.println("Generated XML:\n" + xml);
+        System.out.println(xml);
 
         return webClient.post()
                 .uri("/szamla/")

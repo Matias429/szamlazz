@@ -15,6 +15,7 @@ public class ReceiptMapperService {
 
         ReceiptEntity receipt = new ReceiptEntity();
 
+        receipt.setId(dto.getAlap().getId());
         receipt.setHivasAzonosito(dto.getAlap().getHivasAzonosito());
         receipt.setNyugtaszam(dto.getAlap().getNyugtaszam());
         receipt.setTipus(dto.getAlap().getTipus());
@@ -49,14 +50,6 @@ public class ReceiptMapperService {
                 receipt.addPaymentItem(payment);
             }
         }
-
-        if (dto.getOsszegek() != null) {
-            receipt.setVegosszegNetto(dto.getOsszegek().getTotalossz().getNetto());
-            receipt.setVegosszegAfa(dto.getOsszegek().getTotalossz().getAfa());
-            receipt.setVegosszegBrutto(dto.getOsszegek().getTotalossz().getBrutto());
-        }
-
-
         return receipt;
     }
 }

@@ -1,14 +1,10 @@
 package hu.mbalazs.szamlazz.api;
 
 import hu.mbalazs.szamlazz.dtos.*;
-import hu.mbalazs.szamlazz.helpers.PaymentMethods;
 import hu.mbalazs.szamlazz.services.ReceiptPersistenceService;
 import hu.mbalazs.szamlazz.services.ReceiptWebClientService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -24,23 +20,33 @@ public class ReceiptController {
         this.persistenceService = persistenceService;
     }
 
+    @CrossOrigin(origins = "http://localhost:4200")
     @PostMapping(value = "/createReceipt")
-    public ResponseEntity<ReceiptDto> createReceipt(String hivasAzonosito, Boolean pdfLetoltes, String elotag, PaymentMethods fizmod, String penznem, Optional<String> megjegyzes,
-                                                    List<ReceiptItemsDto.ReceiptItemDto> tetelek, Optional<List<PaymentItemsDto.PaymentItemDto>> kifizetesek) {
+    public ResponseEntity<ReceiptDto> createReceipt(@RequestBody CreateReceiptDto createReceiptDto) {
 
-        String response = client.createReceipt(hivasAzonosito, pdfLetoltes, elotag, fizmod, penznem,
-                megjegyzes, tetelek, kifizetesek);
+        String response = client.createReceipt(
+                "CID-" + System.currentTimeMillis(),
+                createReceiptDto.getPdfLetoltes(),
+                createReceiptDto.getElotag(),
+                createReceiptDto.getFizmod(),
+                createReceiptDto.getPenznem(),
+                Optional.ofNullable(createReceiptDto.getMegjegyzes()),
+                createReceiptDto.getTetelek(),
+                Optional.ofNullable(createReceiptDto.getKifizetesek())
+        );
 
         ReceiptDto receipt = persistenceService.saveReceiptFromXml(response);
         return ResponseEntity.ok(receipt);
     }
 
+    @CrossOrigin(origins = "http://localhost:4200")
     @GetMapping("/getReceipts")
-    public ResponseEntity<List<ReceiptBasicInfoDto>> getReceipts() {
-        List<ReceiptBasicInfoDto> receipts = persistenceService.getAllReceipts().stream().map(ReceiptDto::getAlap).toList();
+    public ResponseEntity<List<ReceiptDto>> getReceipts() {
+        List<ReceiptDto> receipts = persistenceService.getAllReceipts();
         return ResponseEntity.ok(receipts);
     }
 
+    @CrossOrigin(origins = "http://localhost:4200")
     @GetMapping("/getReceipt/{hivasAzonosito}")
     public ResponseEntity<ReceiptDto> getReceipt(@PathVariable String hivasAzonosito) {
         ReceiptDto receipt = persistenceService.getReceiptByHivasAzonosito(hivasAzonosito);

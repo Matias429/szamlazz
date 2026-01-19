@@ -2,8 +2,7 @@ package hu.mbalazs.szamlazz.services;
 
 import hu.mbalazs.szamlazz.dtos.PaymentItemsDto;
 import hu.mbalazs.szamlazz.dtos.ReceiptItemsDto;
-import hu.mbalazs.szamlazz.helpers.PaymentMethods;
-import hu.mbalazs.szamlazz.helpers.XmlOutputProperties;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -21,13 +20,13 @@ import java.util.Optional;
 @Service
 public class XmlGeneratorService {
 
-    private final XmlOutputProperties xmlOutputProperties;
+    private final String agentId;
 
-    public XmlGeneratorService(XmlOutputProperties xmlOutputProperties) {
-        this.xmlOutputProperties = xmlOutputProperties;
+    public XmlGeneratorService(@Value("${xml.output.agent-id}") String agentId) {
+        this.agentId = agentId;
     }
 
-    public String parseDataToXml(String hivasazonosito, Boolean pdfLetoltes, String elotag, PaymentMethods fizmod, String penznem,
+    public String parseDataToXml(String hivasazonosito, Boolean pdfLetoltes, String elotag, String fizmod, String penznem,
                                  Optional<String> megjegyes, List<ReceiptItemsDto.ReceiptItemDto> tetelek, Optional<List<PaymentItemsDto.PaymentItemDto>> kifizetesek) {
         try {
             Document document = DocumentBuilderFactory
@@ -46,7 +45,7 @@ public class XmlGeneratorService {
             Element beallitasok = document.createElement("beallitasok");
             Element szamlaagentkulcsElement = document.createElement("szamlaagentkulcs");
             Element pdfLetoltesElement = document.createElement("pdfLetoltes");
-            szamlaagentkulcsElement.setTextContent(xmlOutputProperties.getAgentId());
+            szamlaagentkulcsElement.setTextContent(this.agentId);
             pdfLetoltesElement.setTextContent(pdfLetoltes.toString());
             beallitasok.appendChild(szamlaagentkulcsElement);
             beallitasok.appendChild(pdfLetoltesElement);
@@ -59,7 +58,7 @@ public class XmlGeneratorService {
             Element fizmodElement = document.createElement("fizmod");
             Element penznemElement = document.createElement("penznem");
             elotagElement.setTextContent(elotag);
-            fizmodElement.setTextContent(fizmod.label);
+            fizmodElement.setTextContent(fizmod);
             penznemElement.setTextContent(penznem);
             hivasAzonositoElement.setTextContent(hivasazonosito);
             fejlec.appendChild(hivasAzonositoElement);
@@ -115,9 +114,9 @@ public class XmlGeneratorService {
             nyugtaCreate.appendChild(tetelekElement);
 
             // Kifizetesek
-            Element kifizetesekElement = document.createElement("kifizetesek");
 
             if (kifizetesek.isPresent()) {
+                Element kifizetesekElement = document.createElement("kifizetesek");
                 for (PaymentItemsDto.PaymentItemDto payment : kifizetesek.get()) {
                     Element kifizetes = document.createElement("kifizetes");
 
@@ -131,9 +130,9 @@ public class XmlGeneratorService {
 
                     kifizetesekElement.appendChild(kifizetes);
                 }
+                nyugtaCreate.appendChild(kifizetesekElement);
             }
 
-            nyugtaCreate.appendChild(kifizetesekElement);
 
 
             Transformer transformer = TransformerFactory.newInstance().newTransformer();

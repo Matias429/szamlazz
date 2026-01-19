@@ -7,7 +7,7 @@ import lombok.Data;
 @Data
 @XmlAccessorType(XmlAccessType.FIELD)
 public class ReceiptDto {
-    private ReceiptBasicInfoDto alap;
+    private ReceiptDetailsDto alap;
     private ReceiptItemsDto tetelek;
     private PaymentItemsDto kifizetesek;
     private ReceiptAmountsDto osszegek;

@@ -14,9 +14,7 @@ import java.util.List;
 public class ReceiptEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String hivasAzonosito;
     private String nyugtaszam;
     private String tipus;

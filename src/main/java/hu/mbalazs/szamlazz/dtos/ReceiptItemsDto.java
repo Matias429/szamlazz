@@ -17,20 +17,6 @@ public class ReceiptItemsDto {
     @Data
     @XmlAccessorType(XmlAccessType.FIELD)
     public static class ReceiptItemDto {
-
-        public ReceiptItemDto(String megnevezes, Double mennyiseg, String mennyisegiEgyseg, Double nettoEgysegar, String afakulcs, Double netto, Double afa, Double brutto) {
-            this.megnevezes = megnevezes;
-            this.mennyiseg = mennyiseg;
-            this.mennyisegiEgyseg = mennyisegiEgyseg;
-            this.nettoEgysegar = nettoEgysegar;
-            this.afakulcs = afakulcs;
-            this.netto = netto;
-            this.afa = afa;
-            this.brutto = brutto;
-        }
-
-        public ReceiptItemDto(){}
-
         private String megnevezes;
         private Double mennyiseg;
         private String mennyisegiEgyseg;

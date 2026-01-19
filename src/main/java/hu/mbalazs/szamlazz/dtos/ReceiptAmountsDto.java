@@ -12,18 +12,6 @@ public class ReceiptAmountsDto {
     @XmlElement(name = "totalossz")
     private TotalAmounts totalossz;
 
-    @XmlElement(name = "afakulcsossz")
-    private AfaAmounts afaKulcsOssz;
-
-    @Data
-    @XmlAccessorType(XmlAccessType.FIELD)
-    public static class AfaAmounts {
-        private String afakulcs;
-        private Double netto;
-        private Double afa;
-        private Double brutto;
-    }
-
     @Data
     @XmlAccessorType(XmlAccessType.FIELD)
     public static class TotalAmounts {
