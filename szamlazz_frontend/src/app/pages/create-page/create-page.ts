@@ -11,6 +11,9 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatListModule } from '@angular/material/list';
 import { CommonModule } from '@angular/common';
 import { PageService } from '../page-service';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { HttpErrorResponse } from '@angular/common/http';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
 @Component({
   selector: 'app-create-page',
@@ -19,7 +22,7 @@ import { PageService } from '../page-service';
     CommonModule, RouterModule, ReactiveFormsModule,
     MatCardModule, MatButtonModule, MatIconModule,
     MatInputModule, MatSelectModule, MatCheckboxModule,
-    MatFormFieldModule, MatListModule
+    MatFormFieldModule, MatListModule, MatAutocompleteModule, MatInputModule
   ],
   templateUrl: './create-page.html',
   styleUrl: './create-page.scss'
@@ -28,11 +31,12 @@ export class CreatePage {
   constructor(private router: Router, private pageService: PageService) {}
 
   private fb = inject(FormBuilder);
+  private snackBar = inject(MatSnackBar);
 
   form = this.fb.group({
     pdfLetoltes: [false],
-    elotag: ['MBLZS', Validators.required],
-    fizmod: ['készpénz', Validators.required],
+    elotag: ['', Validators.required],
+    fizmod: ['Készpénz', Validators.required],
     penznem: ['HUF', Validators.required],
     megjegyzes: [''],
     tetelek: this.fb.array([], Validators.required),
@@ -40,12 +44,12 @@ export class CreatePage {
   });
 
   fizmodOptions = [
-    'átutalás', 'készpénz', 'bankkártya', 'csekk', 'utánvét', 
-    'ajándékutalvány', 'barion', 'barter', 'csoportos beszedés', 
-    'OTP Simple', 'kompenzáció', 'kupon', 'PayPal', 'PayU', 
-    'SZÉP kártya', 'utalvány'
+    'Átutalás', 'Készpénz', 'Bankkártya', 'Csekk', 'Utánvét', 
+    'Ajándékutalvány', 'Barion', 'Barter', 'Csoportos beszedés', 
+    'OTP Simple', 'Kompenzáció', 'Kupon', 'PayPal', 'PayU', 
+    'SZÉP kártya', 'Utalvány'
   ];
-  penznemOptions = ['HUF', 'EUR', 'USD'];
+  penznemOptions = ['HUF', 'EUR', 'USD', 'NOK', 'GBP', 'CHF', 'JPY', 'CNY', 'CZK', 'PLN', 'AUD', 'CAD'];
   mennyisegEgysegek = ['db', 'kg', 'óra', 'perc'];
   afakulcsOptions = [
     '0', '5', '10', '27', 
@@ -131,7 +135,6 @@ async submit() {
           this.calculateTetelTotals(group as FormGroup);
         });
         
-        // Transform form data to match backend DTO structure
         const requestData = {
           pdfLetoltes: formValue.pdfLetoltes || false,
           elotag: formValue.elotag,
@@ -142,17 +145,65 @@ async submit() {
           kifizetesek: formValue.kifizetesek?.length ? formValue.kifizetesek : null
         };
 
-        console.log('Sending to backend:', requestData);
 
         const newReceipt = await this.pageService.createReceipt(requestData).toPromise();
-        console.log('Receipt created:', newReceipt);
         
-        // Navigate to new receipt details or home
+        if (newReceipt?.alap?.nyugtaPdf) {
+          await this.downloadBase64Pdf(newReceipt.alap.nyugtaPdf, newReceipt.alap.hivasAzonosito);
+        }
+
         this.router.navigate(['/details', newReceipt?.alap.hivasAzonosito]);
       } catch (error) {
-        console.error('Error creating receipt:', error);
-        // Show error toast/message here
+
+        let errorMessage = 'Ismeretlen hiba történt';
+
+        if (error instanceof HttpErrorResponse) {
+          errorMessage = error.error || error.message || errorMessage;
+        } else if (error instanceof Error) {
+          errorMessage = error.message;
+        }
+
+        this.snackBar.open(
+        errorMessage + '\nKérlek ellenőrizd az adatokat és próbáld újra!',
+        'OK', 
+        {
+          duration: 8000,
+          horizontalPosition: 'center',
+          verticalPosition: 'top',
+          panelClass: ['error-snackbar', 'center-snackbar']
+        }
+      );
       }
     }
+  }
+
+  downloadBase64Pdf(base64String: string, hivasAzonosito: string) {
+  return new Promise<void>((resolve) => {
+    try {
+      const base64Data = base64String.replace(/^data:application\/pdf;base64,/, '');
+      const byteCharacters = atob(base64Data);
+      const byteNumbers = new Array(byteCharacters.length);
+      for (let i = 0; i < byteCharacters.length; i++) {
+        byteNumbers[i] = byteCharacters.charCodeAt(i);
+      }
+      const byteArray = new Uint8Array(byteNumbers);
+      const blob = new Blob([byteArray], { type: 'application/pdf' });
+
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `nyugta_${hivasAzonosito}.pdf`;
+      document.body.appendChild(link);
+      link.click();
+
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+      
+      resolve();
+    } catch (error) {
+      console.error('PDF download failed:', error);
+      resolve();
+    }
+   });
   }
 }

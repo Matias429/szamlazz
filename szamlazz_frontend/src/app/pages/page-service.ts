@@ -22,8 +22,4 @@ export class PageService {
   createReceipt(data: any): Observable<Receipt> {
     return this.http.post<Receipt>(`${this.apiUrl}/createReceipt`, data);
   }
-
-  createReceipt2(): Observable<Receipt> {
-    return this.http.get<Receipt>(`${this.apiUrl}/createReceipt`);
-  }
 }

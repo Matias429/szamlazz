@@ -41,6 +41,7 @@ export interface Alap {
   penznem: string;
   stornozott: boolean;
   tipus: string;
+  nyugtaPdf?: string;
 }
 
 export interface Receipt {

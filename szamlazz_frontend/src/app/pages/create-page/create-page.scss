@@ -130,3 +130,106 @@ mat-form-field {
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   }
 }
+
+::ng-deep {
+  .mat-mdc-snack-bar-container.center-snackbar {
+    top: 50% !important;
+    transform: translateY(50%) !important;
+  }
+
+  .mat-mdc-snack-bar-container.error-snackbar {
+    background: linear-gradient(
+      135deg,
+      #ff9800,
+      #f57c00,
+      #ef6c00
+    ) !important;
+
+    border-radius: clamp(14px, 4vw, 22px) !important;
+    padding: 1.75rem 2.25rem !important;
+
+    max-width: min(92vw, 640px) !important;
+    min-height: 88px;
+
+    box-shadow:
+      0 16px 32px rgba(255, 152, 0, 0.45),
+      0 32px 64px rgba(0, 0, 0, 0.25) !important;
+
+    border: 1px solid rgba(255, 255, 255, 0.35) !important;
+  }
+
+  .mat-mdc-snack-bar-container.error-snackbar
+  .mdc-snackbar__surface {
+    background: transparent !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+  }
+
+  .mat-mdc-snack-bar-container.error-snackbar
+  .mdc-snackbar__label {
+    white-space: pre-line !important;
+  }
+
+  .error-snackbar {
+    color: white !important;
+
+    .mat-mdc-snack-bar-label {
+      font-weight: 600 !important;
+      font-size: clamp(1rem, 3vw, 1.15rem) !important;
+      line-height: 1.5;
+      letter-spacing: 0.02em;
+      max-width: 420px;
+    }
+
+    .mat-mdc-snack-bar-actions {
+      margin-left: 1.25rem;
+
+      .mat-mdc-button {
+        background: rgba(255, 255, 255, 0.25) !important;
+        color: white !important;
+        border-radius: 999px !important;
+        padding: 0.45rem 1.25rem !important;
+        font-weight: 600;
+      }
+    }
+  }
+}
+
+::ng-deep {
+  .currency-suffix {
+    margin-left: 6px;
+    padding-left: 8px;
+
+    font-weight: 600;
+    font-size: 0.85em;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+
+    color: rgba(0, 0, 0, 0.55);
+
+    border-left: 1px solid rgba(0, 0, 0, 0.15);
+  }
+
+  .mat-mdc-form-field.mat-form-field-appearance-outline {
+    .currency-suffix {
+      color: rgba(255, 255, 255, 0.7);
+      border-left-color: rgba(255, 255, 255, 0.25);
+    }
+  }
+}
+
+.readonly-field {
+  pointer-events: none;
+  color: #757575 !important;
+  
+
+  .mat-mdc-form-field-flex {
+    background-color: #f5f5f5;
+  }
+  
+  input {
+    color: #757575;
+    cursor: not-allowed;
+    -webkit-text-fill-color: #757575;
+  }
+}
