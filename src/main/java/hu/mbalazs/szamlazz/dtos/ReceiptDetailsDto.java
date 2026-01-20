@@ -16,4 +16,5 @@ public class ReceiptDetailsDto {
     private String kelt;
     private String fizmod;
     private String penznem;
+    private String nyugtaPdf;
 }

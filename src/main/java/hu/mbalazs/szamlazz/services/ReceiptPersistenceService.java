@@ -43,9 +43,13 @@ public class ReceiptPersistenceService {
 
     @Transactional
     public ReceiptDto saveReceiptFromXml(String xml) {
-        ReceiptDto dto = parser.parse(xml);
-        repository.save(mapper.toEntity(dto));
-        return dto;
+        try {
+            ReceiptDto dto = parser.parse(xml);
+            repository.save(mapper.toEntity(dto));
+            return dto;
+        } catch (IllegalStateException e) {
+            throw new IllegalStateException(e.getMessage());
+        }
     }
 
     public List<ReceiptDto> getAllReceipts() {

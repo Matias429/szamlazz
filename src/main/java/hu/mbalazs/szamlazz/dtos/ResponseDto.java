@@ -14,6 +14,15 @@ public class ResponseDto {
     @XmlElement(name = "sikeres")
     private Boolean sikeres;
 
+    @XmlElement(name = "nyugtaPdf")
+    private String nyugtaPdf;
+
     @XmlElement(name = "nyugta")
     private ReceiptDto nyugta;
+
+    @XmlElement(name = "hibakod")
+    private String hibakod;
+
+    @XmlElement(name = "hibauzenet")
+    private String hibauzenet;
 }

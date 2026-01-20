@@ -22,7 +22,7 @@ public class ReceiptController {
 
     @CrossOrigin(origins = "http://localhost:4200")
     @PostMapping(value = "/createReceipt")
-    public ResponseEntity<ReceiptDto> createReceipt(@RequestBody CreateReceiptDto createReceiptDto) {
+    public ResponseEntity<?> createReceipt(@RequestBody CreateReceiptDto createReceiptDto) {
 
         String response = client.createReceipt(
                 "CID-" + System.currentTimeMillis(),
@@ -34,9 +34,12 @@ public class ReceiptController {
                 createReceiptDto.getTetelek(),
                 Optional.ofNullable(createReceiptDto.getKifizetesek())
         );
-
-        ReceiptDto receipt = persistenceService.saveReceiptFromXml(response);
-        return ResponseEntity.ok(receipt);
+        try {
+            ReceiptDto receipt = persistenceService.saveReceiptFromXml(response);
+            return ResponseEntity.ok(receipt);
+        } catch (IllegalStateException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @CrossOrigin(origins = "http://localhost:4200")

@@ -16,14 +16,17 @@ public class XmlParserService {
             Unmarshaller unmarshaller = context.createUnmarshaller();
             ResponseDto response = (ResponseDto) unmarshaller.unmarshal(new StringReader(xml));
 
-            if (Boolean.FALSE.equals(response.getSikeres())) {
+            if (!response.getSikeres()) {
                 System.out.println(response);
-                throw new IllegalStateException("Számlázz.hu response was not successful");
+                throw new IllegalStateException(response.getHibauzenet());
             }
 
+            if (response.getNyugtaPdf() != null) {
+                response.getNyugta().getAlap().setNyugtaPdf(response.getNyugtaPdf());
+            }
             return response.getNyugta();
         } catch (Exception e) {
-            throw new IllegalStateException("Failed to parse Számlázz.hu XML", e);
+            throw new IllegalStateException(e.getMessage());
         }
     }
 }
