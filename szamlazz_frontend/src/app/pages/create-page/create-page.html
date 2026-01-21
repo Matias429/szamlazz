@@ -5,19 +5,20 @@
 
   <mat-card-content>
     <form [formGroup]="form" (ngSubmit)="submit()">
-      <!-- Basic Info -->
+
+      <!-- Details -->
       <div class="form-section">
         <h3>Alapadatok</h3>
         <div class="form-grid">
           <mat-form-field>
             <mat-label>Előtag</mat-label>
-            <input matInput formControlName="elotag">
+            <input matInput formControlName="prefix">
           </mat-form-field>
 
           <mat-form-field>
             <mat-label>Fizetési mód</mat-label>
-            <mat-select formControlName="fizmod">
-              @for (option of fizmodOptions; track option) {
+            <mat-select formControlName="paymentMethod">
+              @for (option of paymentMethodOptions; track option) {
                 <mat-option [value]="option">{{ option }}</mat-option>
               }
             </mat-select>
@@ -25,67 +26,67 @@
 
           <mat-form-field>
             <mat-label>Pénznem</mat-label>
-            <input type="text" matInput formControlName="penznem" [matAutocomplete]="auto">
+            <input type="text" matInput formControlName="currency" [matAutocomplete]="auto">
             <mat-icon matSuffix style="font-size: 1.2em; color: gray;">arrow_drop_down</mat-icon>
             <mat-autocomplete #auto="matAutocomplete">
-              @for (option of penznemOptions; track option) {
+              @for (option of currencyOptions; track option) {
                 <mat-option [value]="option">{{ option }}</mat-option>
               }
             </mat-autocomplete>
           </mat-form-field>
 
-          <mat-checkbox formControlName="pdfLetoltes">PDF letöltés</mat-checkbox>
+          <mat-checkbox formControlName="pdfDownload">PDF letöltés</mat-checkbox>
 
           <mat-form-field class="full-width">
             <mat-label>Megjegyzés</mat-label>
-            <textarea matInput formControlName="megjegyzes" rows="3"></textarea>
+            <textarea matInput formControlName="note" rows="3"></textarea>
           </mat-form-field>
         </div>
       </div>
 
       <!-- Items -->
       <div class="form-section">
-        <div class="tetel-header">
+        <div class="item-header">
         <h3>Tételek</h3>
-        @if (hasTetelek) {
+        @if (hasItems) {
           <div class="total-inline">
-            <span>Összesen: {{ totalBrutto | number:'1.2-2' }} {{ form.get('penznem')?.value }}</span>
+            <span>Összesen: {{ totalGross }} {{ form.get('currency')?.value }}</span>
           </div>
         }
         </div>
 
-        <button type="button" mat-stroked-button (click)="addTetel()" color="primary">
+        <button type="button" mat-stroked-button (click)="addItem()" color="primary">
           <mat-icon>add</mat-icon> Új tétel
         </button>
         
-        <div formArrayName="tetelek" class="items-list">
-          @for (tetel of tetelekArray.controls; track tetel; let i = $index) {
+        <div formArrayName="itemList" class="items-list">
+          @for (item of itemList.controls; track item; let i = $index) {
             <div [formGroupName]="i" class="item-group">
               <div class="item-grid">
                 <mat-form-field>
                   <mat-label>Megnevezés</mat-label>
-                  <input matInput formControlName="megnevezes">
+                  <input matInput formControlName="name">
                 </mat-form-field>
                 
                 <mat-form-field>
                   <mat-label>Mennyiség</mat-label>
-                  <input matInput type="number" formControlName="mennyiseg">
+                  <input matInput type="number" formControlName="amount">
                 </mat-form-field>
                 
                 <mat-form-field>
                   <mat-label>Egység</mat-label>
-                  <input matInput formControlName="mennyisegiEgyseg">
+                  <input matInput formControlName="unitOfMeasure">
                 </mat-form-field>
                 
                 <mat-form-field>
                   <mat-label>Nettó egységár</mat-label>
-                  <input matInput type="number" formControlName="nettoEgysegar">
+                  <input matInput type="number" formControlName="netUnitPrice">
                 </mat-form-field>
                 
                 <mat-form-field>
                     <mat-label>ÁFA kulcs</mat-label>
-                    <mat-select formControlName="afakulcs">
-                        @for (afa of afakulcsOptions; track afa) {
+                    <mat-select formControlName="vatRate">
+                        @for (afa of vatRateOptions; track afa) {
                         <mat-option [value]="afa">{{ afa }}</mat-option>
                         }
                     </mat-select>
@@ -93,24 +94,24 @@
 
                 <mat-form-field class="readonly-field">
                     <mat-label>Nettó Összeg</mat-label>
-                        <input matInput type="number" formControlName="netto" readonly>
-                        <span matSuffix class="currency-suffix">{{ form.get('penznem')?.value }}</span>
+                        <input matInput type="number" formControlName="net" readonly>
+                        <span matSuffix class="currency-suffix">{{ form.get('currency')?.value }}</span>
                     <mat-hint>Automatikusan számolva</mat-hint>
                 </mat-form-field>
 
                 <mat-form-field class="readonly-field">
                     <mat-label>ÁFA Összeg</mat-label>
-                        <input matInput type="number" formControlName="afa" readonly>
-                        <span matSuffix class="currency-suffix">{{ form.get('penznem')?.value }}</span>
+                        <input matInput type="number" formControlName="vat" readonly>
+                        <span matSuffix class="currency-suffix">{{ form.get('currency')?.value }}</span>
                 </mat-form-field>
 
                 <mat-form-field class="readonly-field">
                     <mat-label>Bruttó Összeg</mat-label>
-                        <input matInput type="number" formControlName="brutto" readonly style="font-weight: bold;">
-                        <span matSuffix class="currency-suffix">{{ form.get('penznem')?.value }}</span>
+                        <input matInput type="number" formControlName="gross" readonly style="font-weight: bold;">
+                        <span matSuffix class="currency-suffix">{{ form.get('currency')?.value }}</span>
                 </mat-form-field>
                 
-                <button type="button" mat-icon-button (click)="removeTetel(i)">
+                <button type="button" mat-icon-button (click)="removeItem(i)">
                   <mat-icon>delete</mat-icon>
                 </button>
               </div>
@@ -121,36 +122,36 @@
 
       <!-- Payments -->
       <div class="form-section">
-        <div class="tetel-header">
+        <div class="item-header">
         <h3>Kifizetések</h3>
-        @if(hasKifizetesek) {
+        @if(hasPayments) {
         <div class="total-inline">
           <span [class]="remainingAmount > 0 ? 'positive' : 'negative'">
-            {{ remainingAmount | number:'1.2-2' }} {{ form.get('penznem')?.value }} hátra
+            {{ remainingAmount | number:'1.2-2' }} {{ form.get('currency')?.value }} hátra
           </span>
         </div>
       }
       </div>
 
-        <button type="button" mat-stroked-button (click)="addKifizetes()" color="primary">
+        <button type="button" mat-stroked-button (click)="addPayment()" color="primary">
           <mat-icon>add</mat-icon> Új kifizetés
         </button>
         
-        <div formArrayName="kifizetesek" class="items-list">
-          @for (kifizetes of kifizetesekArray.controls; track kifizetes; let i = $index) {
+        <div formArrayName="paymentList" class="items-list">
+          @for (payment of paymentList.controls; track payment; let i = $index) {
             <div [formGroupName]="i" class="item-group">
               <div class="item-grid">
                 <mat-form-field>
                   <mat-label>Fizetőeszköz</mat-label>
-                  <input matInput formControlName="fizetoeszkoz">
+                  <input matInput formControlName="paymentMethod">
                 </mat-form-field>
                 
                 <mat-form-field>
                   <mat-label>Összeg</mat-label>
-                  <input matInput type="number" formControlName="osszeg">
+                  <input matInput type="number" formControlName="amount">
                 </mat-form-field>
                 
-                <button type="button" mat-icon-button (click)="removeKifizetes(i)">
+                <button type="button" mat-icon-button (click)="removePayment(i)">
                   <mat-icon>delete</mat-icon>
                 </button>
               </div>
@@ -159,7 +160,6 @@
         </div>
       </div>
 
-      <!-- Navigation (your existing nav-bar) -->
       <div class="nav-bar">
         <button mat-raised-button color="primary" routerLink="/home">
           <mat-icon>arrow_back</mat-icon>
@@ -168,7 +168,7 @@
         <button mat-raised-button 
                 color="accent" 
                 type="submit" 
-                [disabled]="form.invalid || form.get('tetelek')?.errors?.['atLeastOneTetel'] || formInvalidDueToPayments">
+                [disabled]="form.invalid || form.get('itemList')?.errors?.['atLeastOneItem'] || formInvalidDueToPayments">
           <mat-icon>send</mat-icon>
           Létrehozás
         </button>

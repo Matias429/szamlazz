@@ -15,8 +15,8 @@ export class PageService {
     return this.http.get<Receipt[]>(`${this.apiUrl}/getReceipts`);
   }
 
-  getReceipt(hivasAzonosito: string): Observable<Receipt> {
-    return this.http.get<Receipt>(`${this.apiUrl}/getReceipt/${hivasAzonosito}`);
+  getReceipt(callId: string): Observable<Receipt> {
+    return this.http.get<Receipt>(`${this.apiUrl}/getReceipt/${callId}`);
   }
 
   createReceipt(data: any): Observable<Receipt> {

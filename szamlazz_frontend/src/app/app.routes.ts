@@ -6,7 +6,7 @@ import { CreatePage } from './pages/create-page/create-page';
 export const routes: Routes = [
     { path: '', redirectTo: 'home', pathMatch: 'full' },
     { path: 'home', component: HomePage },
-    { path: 'details/:hivasAzonosito', component: DetailsPage },
+    { path: 'details/:callId', component: DetailsPage },
     { path: 'create', component: CreatePage },
     { path: '**', redirectTo: 'home' }
 ];

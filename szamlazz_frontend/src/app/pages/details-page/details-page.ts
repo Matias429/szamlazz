@@ -18,10 +18,10 @@ import { MatButtonModule } from '@angular/material/button';
 })
 export class DetailsPage {
   receipt = signal<Receipt | null>(null);
-  hivasAzonosito = '';
-  detailColumns = ['megnevezes', 'mennyiseg', 'nettoEgysegar', 'afakulcs', 'netto', 'afa', 'brutto'];
+  callId = '';
+  detailColumns = ['name', 'amount', 'netUnitPrice', 'vatRate', 'net', 'vat', 'gross'];
   
-  paymentColumns = ['fizetoeszkoz', 'osszeg'];
+  paymentColumns = ['paymentMethod', 'amount'];
 
   constructor(
     private route: ActivatedRoute,
@@ -29,9 +29,9 @@ export class DetailsPage {
   ) {}
 
   ngOnInit(): void {
-    this.hivasAzonosito = this.route.snapshot.paramMap.get('hivasAzonosito')!;
+    this.callId = this.route.snapshot.paramMap.get('callId')!;
     
-    this.pageService.getReceipt(this.hivasAzonosito).subscribe({
+    this.pageService.getReceipt(this.callId).subscribe({
       next: (data) => this.receipt.set(data),
       error: (err) => console.error('Receipt not found:', err)
     });

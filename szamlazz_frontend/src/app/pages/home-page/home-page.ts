@@ -19,7 +19,7 @@ import { MatButtonModule } from '@angular/material/button';
 export class HomePage implements OnInit {
   receipts = signal<Receipt[]>([]);
   displayedColumns: string[] = [
-    'nyugtaszam', 'kelt', 'nettoOsszeg', 'bruttoOsszeg'
+    'receiptNumber', 'receiptDate', 'netAmount', 'grossAmount'
   ];
 
   constructor(private pageService: PageService, private router: Router) {}
@@ -36,7 +36,7 @@ export class HomePage implements OnInit {
     });
   }
 
-  goToDetails(hivasAzonosito: string) {
-    this.router.navigate(['/details', hivasAzonosito]);
+  goToDetails(callId: string) {
+    this.router.navigate(['/details', callId]);
   }
 }

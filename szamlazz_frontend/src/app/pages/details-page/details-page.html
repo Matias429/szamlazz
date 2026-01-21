@@ -6,7 +6,7 @@
   <mat-card>
     <mat-card-header>
       <mat-card-title>
-        {{ receipt()!.alap.nyugtaszam }} 
+        {{ receipt()!.details.receiptNumber }} 
       </mat-card-title>
     </mat-card-header>
     
@@ -14,69 +14,69 @@
       <!-- Enhanced Basic Info -->
       <div class="info-grid">
         <mat-list>
-          <mat-list-item><strong>Nyugta szám:</strong> {{ receipt()!.alap.nyugtaszam }}</mat-list-item>
-          <mat-list-item><strong>Hívásazonosító:</strong> {{ receipt()!.alap.hivasAzonosito }}</mat-list-item>
-          <mat-list-item><strong>Keltezés:</strong> {{ receipt()!.alap.kelt }}</mat-list-item>
-          <mat-list-item><strong>Típus:</strong> {{ receipt()!.alap.tipus }}</mat-list-item>
-          <mat-list-item><strong>Fizetési mód:</strong> {{ receipt()!.alap.fizmod }}</mat-list-item>
-          <mat-list-item><strong>Pénznem:</strong> {{ receipt()!.alap.penznem }}</mat-list-item>
-          <mat-list-item><strong>Státusz:</strong> {{ receipt()!.alap.stornozott ? 'Sztornózott' : 'Aktív' }}</mat-list-item>
+          <mat-list-item><strong>Nyugta szám:</strong> {{ receipt()!.details.receiptNumber }}</mat-list-item>
+          <mat-list-item><strong>Hívásazonosító:</strong> {{ receipt()!.details.callId }}</mat-list-item>
+          <mat-list-item><strong>Keltezés:</strong> {{ receipt()!.details.receiptDate }}</mat-list-item>
+          <mat-list-item><strong>Típus:</strong> {{ receipt()!.details.receiptType }}</mat-list-item>
+          <mat-list-item><strong>Fizetési mód:</strong> {{ receipt()!.details.paymentMethod }}</mat-list-item>
+          <mat-list-item><strong>Pénznem:</strong> {{ receipt()!.details.currency }}</mat-list-item>
+          <mat-list-item><strong>Státusz:</strong> {{ receipt()!.details.isCancelled ? 'Sztornózott' : 'Aktív' }}</mat-list-item>
         </mat-list>
         
         <!-- Totals -->
         <div class="totals">
           <h3>📊 Összesítés</h3>
-          <p>Nettó: {{ receipt()!.osszegek.totalossz.netto | number:'1.0-0' }} {{ receipt()!.alap.penznem }}</p>
-          <p>ÁFA: {{ receipt()!.osszegek.totalossz.afa | number:'1.0-0' }} {{ receipt()!.alap.penznem }}</p>
-          <p><strong>Bruttó: {{ receipt()!.osszegek.totalossz.brutto | number:'1.0-0' }} {{ receipt()!.alap.penznem }}</strong></p>
+          <p>Nettó: {{ receipt()!.amountList.totalAmounts.net }} {{ receipt()!.details.currency }}</p>
+          <p>ÁFA: {{ receipt()!.amountList.totalAmounts.vat }} {{ receipt()!.details.currency }}</p>
+          <p><strong>Bruttó: {{ receipt()!.amountList.totalAmounts.gross }} {{ receipt()!.details.currency }}</strong></p>
         </div>
       </div>
 
       <!-- Items Table with FULL COLUMN HEADERS -->
-      <h3>📦 Tételek ({{ receipt()!.tetelek.items.length }})</h3>
+      <h3>📦 Tételek ({{ receipt()!.itemList.itemList.length }})</h3>
       <div class="table-container">
-        <table mat-table [dataSource]="receipt()!.tetelek.items" class="mat-elevation-z8">
-          <!-- Megnevezés -->
-          <ng-container matColumnDef="megnevezes">
+        <table mat-table [dataSource]="receipt()!.itemList.itemList" class="mat-elevation-z8">
+          <!-- Name -->
+          <ng-container matColumnDef="name">
             <th mat-header-cell *matHeaderCellDef>Megnevezés</th>
-            <td mat-cell *matCellDef="let item">{{ item.megnevezes }}</td>
+            <td mat-cell *matCellDef="let item">{{ item.name }}</td>
           </ng-container>
           
-          <!-- Mennyiség -->
-          <ng-container matColumnDef="mennyiseg">
+          <!-- Amount -->
+          <ng-container matColumnDef="amount">
             <th mat-header-cell *matHeaderCellDef>Mennyiség</th>
-            <td mat-cell *matCellDef="let item">{{ item.mennyiseg }} {{ item.mennyisegiEgyseg }}</td>
+            <td mat-cell *matCellDef="let item">{{ item.amount }} {{ item.unitOfMeasure }}</td>
           </ng-container>
           
-          <!-- Nettó egységár -->
-          <ng-container matColumnDef="nettoEgysegar">
+          <!-- Net Unit Price -->
+          <ng-container matColumnDef="netUnitPrice">
             <th mat-header-cell *matHeaderCellDef>Nettó egységár</th>
-            <td mat-cell *matCellDef="let item">{{ item.nettoEgysegar | number:'1.2-2' }} {{ receipt()!.alap.penznem }}</td>
+            <td mat-cell *matCellDef="let item">{{ item.netUnitPrice }} {{ receipt()!.details.currency }}</td>
           </ng-container>
           
-          <!-- ÁFA -->
-          <ng-container matColumnDef="afakulcs">
+          <!-- VAT Rate -->
+          <ng-container matColumnDef="vatRate">
             <th mat-header-cell *matHeaderCellDef>ÁFA kulcs</th>
-            <td mat-cell *matCellDef="let item">{{ item.afakulcs }}%</td>
+            <td mat-cell *matCellDef="let item">{{ item.vatRate }}%</td>
           </ng-container>
           
-          <!-- Nettó -->
-          <ng-container matColumnDef="netto">
-            <th mat-header-cell *matHeaderCellDef>Nettó</th>
-            <td mat-cell *matCellDef="let item">{{ item.netto | number:'1.0-0' }} {{ receipt()!.alap.penznem }}</td>
+          <!-- Net Amount -->
+          <ng-container matColumnDef="net">
+            <th mat-header-cell *matHeaderCellDef>Nettó Összeg</th>
+            <td mat-cell *matCellDef="let item">{{ item.net }} {{ receipt()!.details.currency }}</td>
           </ng-container>
           
-          <!-- ÁFA összeg -->
-          <ng-container matColumnDef="afa">
+          <!-- VAT Amount -->
+          <ng-container matColumnDef="vat">
             <th mat-header-cell *matHeaderCellDef>ÁFA összeg</th>
-            <td mat-cell *matCellDef="let item">{{ item.afa | number:'1.0-0' }} {{ receipt()!.alap.penznem }}</td>
+            <td mat-cell *matCellDef="let item">{{ item.vat }} {{ receipt()!.details.currency }}</td>
           </ng-container>
           
-          <!-- Bruttó -->
-          <ng-container matColumnDef="brutto">
-            <th mat-header-cell *matHeaderCellDef>Bruttó</th>
-            <td mat-cell *matCellDef="let item" class="brutto-cell">
-              <strong>{{ item.brutto | number:'1.0-0' }} {{ receipt()!.alap.penznem }}</strong>
+          <!-- Gross Amount -->
+          <ng-container matColumnDef="gross">
+            <th mat-header-cell *matHeaderCellDef>Bruttó Összeg</th>
+            <td mat-cell *matCellDef="let item" class="gross-cell">
+              <strong>{{ item.gross }} {{ receipt()!.details.currency }}</strong>
             </td>
           </ng-container>
 
@@ -86,19 +86,19 @@
       </div>
 
       <!-- Payments Section -->
-      @if (receipt()!.kifizetesek?.items?.length) {
-        <h3>💳 Kifizetések ({{ receipt()!.kifizetesek?.items?.length }})</h3>
+      @if (receipt()!.paymentList?.itemList?.length) {
+        <h3>💳 Kifizetések ({{ receipt()!.paymentList?.itemList?.length }})</h3>
         <div class="table-container">
-          <table mat-table [dataSource]="receipt()!.kifizetesek!.items!" class="mat-elevation-z8">
-            <ng-container matColumnDef="fizetoeszkoz">
+          <table mat-table [dataSource]="receipt()!.paymentList!.itemList!" class="mat-elevation-z8">
+            <ng-container matColumnDef="paymentMethod">
               <th mat-header-cell *matHeaderCellDef>Fizetőeszköz</th>
-              <td mat-cell *matCellDef="let item">{{ item.fizetoeszkoz }}</td>
+              <td mat-cell *matCellDef="let item">{{ item.paymentMethod }}</td>
             </ng-container>
             
-            <ng-container matColumnDef="osszeg">
+            <ng-container matColumnDef="amount">
               <th mat-header-cell *matHeaderCellDef>Összeg</th>
               <td mat-cell *matCellDef="let item" class="amount-cell">
-                <strong>{{ item.osszeg | number:'1.0-0' }} {{ receipt()!.alap.penznem }}</strong>
+                <strong>{{ item.amount }} {{ receipt()!.details.currency }}</strong>
               </td>
             </ng-container>
 

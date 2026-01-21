@@ -9,28 +9,28 @@
     } @else {
       <table mat-table [dataSource]="receipts()" class="mat-elevation-z8">
 
-        <!-- Nyugtaszam Column -->
-        <ng-container matColumnDef="nyugtaszam">
+        <!-- Receipt Number Column -->
+        <ng-container matColumnDef="receiptNumber">
           <th mat-header-cell *matHeaderCellDef>Nyugtaszám</th>
-          <td mat-cell *matCellDef="let receipt"> {{ receipt.alap.nyugtaszam }} </td>
+          <td mat-cell *matCellDef="let receipt"> {{ receipt.details.receiptNumber }} </td>
         </ng-container>
 
-        <!-- Kelt Column -->
-        <ng-container matColumnDef="kelt">
+        <!-- Receipt Date Column -->
+        <ng-container matColumnDef="receiptDate">
           <th mat-header-cell *matHeaderCellDef>Keltezés</th>
-          <td mat-cell *matCellDef="let receipt"> {{ receipt.alap.kelt }} </td>
+          <td mat-cell *matCellDef="let receipt"> {{ receipt.details.receiptDate }} </td>
         </ng-container>
 
-        <!-- Netto Osszeg Column-->
-        <ng-container matColumnDef="nettoOsszeg">
+        <!-- Net Amount Column-->
+        <ng-container matColumnDef="netAmount">
           <th mat-header-cell *matHeaderCellDef>Teljes Nettó Összeg</th>
-          <td mat-cell *matCellDef="let receipt"> {{ receipt.osszegek.totalossz.netto }} {{ receipt.alap.penznem }}</td>
+          <td mat-cell *matCellDef="let receipt"> {{ receipt.amountList.totalAmounts.net }} {{ receipt.details.currency }}</td>
         </ng-container>
 
-        <!-- Brutto Osszeg Column-->
-        <ng-container matColumnDef="bruttoOsszeg">
+        <!-- Gross Amount Column-->
+        <ng-container matColumnDef="grossAmount">
           <th mat-header-cell *matHeaderCellDef>Teljes Bruttó Összeg</th>
-          <td mat-cell *matCellDef="let receipt"> {{ receipt.osszegek.totalossz.brutto }} {{ receipt.alap.penznem }}</td>
+          <td mat-cell *matCellDef="let receipt"> {{ receipt.amountList.totalAmounts.gross }} {{ receipt.details.currency }}</td>
         </ng-container>
 
         <!-- Header and Row Definitions -->
@@ -39,7 +39,7 @@
             *matRowDef="let row; columns: displayedColumns;" 
             class="receipt-row"
             style="cursor: pointer;"
-            (click)="goToDetails(row.alap.hivasAzonosito)">
+            (click)="goToDetails(row.details.callId)">
         </tr>
       </table>
     }

@@ -1,52 +1,52 @@
-export interface TotalOssz {
-  netto: number;
-  afa: number;
-  brutto: number;
+export interface TotalAmounts {
+  net: number;
+  vat: number;
+  gross: number;
 }
 
-export interface Osszegek {
-  totalossz: TotalOssz;
+export interface AmountList {
+  totalAmounts: TotalAmounts;
 }
 
 export interface ReceiptItem {
-  megnevezes: string;
-  mennyiseg: number;
-  mennyisegiEgyseg: string;
-  nettoEgysegar: number;
-  afakulcs: string;
-  netto: number;
-  afa: number;
-  brutto: number;
+  name: string;
+  amount: number;
+  unitOfMeasure: string;
+  netUnitPrice: number;
+  vatRate: string;
+  net: number;
+  vat: number;
+  gross: number;
 }
 
-export interface Tetelek {
-  items: ReceiptItem[];
+export interface ItemList {
+  itemList: ReceiptItem[];
 }
 
 export interface PaymentItem {
-  fizetoeszkoz: string;
-  osszeg: number;
+  paymentMethod: string;
+  amount: number;
 }
 
-export interface Kifizetesek {
-  items: PaymentItem[];
+export interface PaymentList {
+  itemList: PaymentItem[];
 }
 
-export interface Alap {
-  fizmod: string;
-  hivasAzonosito: string;
+export interface Details {
+  paymentMethod: string;
+  callId: string;
   id: number;
-  kelt: string;
-  nyugtaszam: string;
-  penznem: string;
-  stornozott: boolean;
-  tipus: string;
-  nyugtaPdf?: string;
+  receiptDate: string;
+  receiptNumber: string;
+  currency: string;
+  isCancelled: boolean;
+  receiptType: string;
+  receiptPdf?: string;
 }
 
 export interface Receipt {
-  alap: Alap;
-  tetelek: Tetelek;
-  kifizetesek?: Kifizetesek;
-  osszegek: Osszegek;
+  details: Details;
+  itemList: ItemList;
+  paymentList?: PaymentList;
+  amountList: AmountList;
 }

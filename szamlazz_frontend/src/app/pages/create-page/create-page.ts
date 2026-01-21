@@ -34,23 +34,23 @@ export class CreatePage {
   private snackBar = inject(MatSnackBar);
 
   form = this.fb.group({
-    pdfLetoltes: [false],
-    elotag: ['', Validators.required],
-    fizmod: ['Készpénz', Validators.required],
-    penznem: ['HUF', Validators.required],
-    megjegyzes: [''],
-    tetelek: this.fb.array([], Validators.required),
-    kifizetesek: this.fb.array([])
+    pdfDownload: [false],
+    prefix: ['', Validators.required],
+    paymentMethod: ['Készpénz', Validators.required],
+    currency: ['HUF', Validators.required],
+    note: [''],
+    itemList: this.fb.array([], Validators.required),
+    paymentList: this.fb.array([])
   });
 
-  fizmodOptions = [
+  paymentMethodOptions = [
     'Átutalás', 'Készpénz', 'Bankkártya', 'Csekk', 'Utánvét', 
     'Ajándékutalvány', 'Barion', 'Barter', 'Csoportos beszedés', 
     'OTP Simple', 'Kompenzáció', 'Kupon', 'PayPal', 'PayU', 
     'SZÉP kártya', 'Utalvány'
   ];
-  penznemOptions = ['HUF', 'EUR', 'USD', 'NOK', 'GBP', 'CHF', 'JPY', 'CNY', 'CZK', 'PLN', 'AUD', 'CAD'];
-  afakulcsOptions = [
+  currencyOptions = ['HUF', 'EUR', 'USD', 'NOK', 'GBP', 'CHF', 'JPY', 'CNY', 'CZK', 'PLN', 'AUD', 'CAD'];
+  vatRateOptions = [
     '0', '5', '10', '27', 
     'AAM', 'TAM', 'EU', 'EUK', 
     'MAA', 'F.AFA', 'K.AFA', 'ÁKK', 
@@ -58,97 +58,97 @@ export class CreatePage {
     'ATK', 'NAM', 'EAM', 'KBAUK', 'KBAET'
   ];
 
-  get tetelekArray() { return this.form.get('tetelek') as FormArray; }
-  get kifizetesekArray() { return this.form.get('kifizetesek') as FormArray; }
+  get itemList() { return this.form.get('itemList') as FormArray; }
+  get paymentList() { return this.form.get('paymentList') as FormArray; }
 
 
 
-  addTetel() {
+addItem() {
     const group = this.fb.group({
-      megnevezes: [, Validators.required],
-      mennyiseg: [, [Validators.required, Validators.min(0.01)]],
-      mennyisegiEgyseg: [, Validators.required],
-      nettoEgysegar: [, [Validators.required, Validators.min(0)]],
-      afakulcs: [this.afakulcsOptions[3], Validators.required],
-      netto: [0, {value: 0, disabled: true}],
-      afa: [0, {value: 0, disabled: true}],  
-      brutto: [0, {value: 0, disabled: true}]
+      name: [, Validators.required],
+      amount: [, [Validators.required, Validators.min(0.01)]],
+      unitOfMeasure: [, Validators.required],
+      netUnitPrice: [, [Validators.required, Validators.min(0)]],
+      vatRate: [this.vatRateOptions[3], Validators.required],
+      net: [0, {value: 0, disabled: true}],
+      vat: [0, {value: 0, disabled: true}],  
+      gross: [0, {value: 0, disabled: true}]
     });
 
-    const inputControls = ['mennyiseg', 'nettoEgysegar', 'afakulcs'];
+  const inputControls = ['amount', 'netUnitPrice', 'vatRate'];
     inputControls.forEach(controlName => {
       group.get(controlName)?.valueChanges.subscribe(() => {
-        this.calculateTetelTotals(group);
+        this.calculateItemTotals(group);
       });
     });
 
-    this.tetelekArray.push(group);
-    this.calculateTetelTotals(group);
+    this.itemList.push(group);
+    this.calculateItemTotals(group);
   }
 
-  addKifizetes() {
-    this.kifizetesekArray.push(this.fb.group({
-      fizetoeszkoz: ['', Validators.required],
-      osszeg: [0, [Validators.required, Validators.min(0)]]
+  addPayment() {
+    this.paymentList.push(this.fb.group({
+      paymentMethod: ['', Validators.required],
+      amount: [, [Validators.required, Validators.min(0)]]
     }));
   }
 
-  removeTetel(index: number) {
-    this.tetelekArray.removeAt(index);
+  removeItem(index: number) {
+    this.itemList.removeAt(index);
   }
 
-  removeKifizetes(index: number) {
-    this.kifizetesekArray.removeAt(index);
+  removePayment(index: number) {
+    this.paymentList.removeAt(index);
   }
 
-  calculateTetelTotals(group: FormGroup) {
-    const mennyiseg = group.get('mennyiseg')?.value || 0;
-    const nettoEgysegar = group.get('nettoEgysegar')?.value || 0;
-    const afakulcsRaw = group.get('afakulcs')?.value || '0';
+  calculateItemTotals(group: FormGroup) {
+    const amount = group.get('amount')?.value || 0;
+    const netUnitPrice = group.get('netUnitPrice')?.value || 0;
+    const vatRateRaw = group.get('vatRate')?.value || '0';
     
-    const netto = Number((mennyiseg * nettoEgysegar).toFixed(2));
+    const net = Number((amount * netUnitPrice).toFixed(2));
     
-    let afaRate = 0;
-    const numericVat = parseFloat(afakulcsRaw);
+    let vatRate = 0;
+    const numericVat = parseFloat(vatRateRaw);
     if (!isNaN(numericVat)) {
-      afaRate = numericVat / 100;
+      vatRate = numericVat / 100;
     }
     
-    const afa = Number((netto * afaRate).toFixed(2));
-    const brutto = Number((netto + afa).toFixed(2));
+    const vat = Number((net * vatRate).toFixed(2));
+    const gross = Number((net + vat).toFixed(2));
     
     group.patchValue({
-      netto,
-      afa, 
-      brutto
+      net,
+      vat, 
+      gross
     });
   }
 
-  get totalBrutto(): number {
-  return this.tetelekArray.controls
-    .filter(control => control.get('brutto')?.value)
-    .reduce((sum, control) => sum + (control.get('brutto')?.value || 0), 0);
+  get totalGross(): number {
+  return this.itemList.controls
+    .filter(control => control.get('gross')?.value)
+    .reduce((sum, control) => sum + (control.get('gross')?.value || 0), 0);
   }
 
-  get hasTetelek(): boolean {
-    return this.tetelekArray.length > 0;
+  get hasItems(): boolean {
+    return this.itemList.length > 0;
   }
 
-  get totalKifizetesek(): number {
-    return this.kifizetesekArray.controls
-      .reduce((sum, control) => sum + (control.get('osszeg')?.value || 0), 0);
+  get totalPayments(): number {
+    return this.paymentList.controls
+      .reduce((sum, control) => sum + (control.get('amount')?.value || 0), 0);
   }
 
-  get hasKifizetesek(): boolean {
-    return this.kifizetesekArray.length > 0;
+  get hasPayments(): boolean {
+    return this.paymentList.length > 0;
   }
 
   get remainingAmount(): number {
-    return this.hasTetelek ? this.totalBrutto - this.totalKifizetesek : 0;
+    return this.hasItems ? this.totalGross - this.totalPayments : 0;
   }
 
   get formInvalidDueToPayments(): boolean {
-    return this.hasKifizetesek && Math.abs(this.remainingAmount) > 0;
+    return this.hasPayments && Math.abs(this.remainingAmount) > 0;
   }
 
 async submit() {
@@ -156,28 +156,28 @@ async submit() {
       try {
         const formValue = this.form.value;
 
-        this.tetelekArray.controls.forEach(group => {
-          this.calculateTetelTotals(group as FormGroup);
+        this.itemList.controls.forEach(group => {
+          this.calculateItemTotals(group as FormGroup);
         });
         
         const requestData = {
-          pdfLetoltes: formValue.pdfLetoltes || false,
-          elotag: formValue.elotag,
-          fizmod: formValue.fizmod,
-          penznem: formValue.penznem,
-          megjegyzes: formValue.megjegyzes || null,
-          tetelek: formValue.tetelek || [],
-          kifizetesek: formValue.kifizetesek?.length ? formValue.kifizetesek : null
+          pdfDownload: formValue.pdfDownload || false,
+          prefix: formValue.prefix,
+          paymentMethod: formValue.paymentMethod,
+          currency: formValue.currency,
+          note: formValue.note || null,
+          itemList: formValue.itemList || [],
+          paymentList: formValue.paymentList?.length ? formValue.paymentList : null
         };
 
 
         const newReceipt = await this.pageService.createReceipt(requestData).toPromise();
         
-        if (newReceipt?.alap?.nyugtaPdf) {
-          await this.downloadBase64Pdf(newReceipt.alap.nyugtaPdf, newReceipt.alap.hivasAzonosito);
+        if (newReceipt?.details?.receiptPdf) {
+          await this.downloadBase64Pdf(newReceipt.details.receiptPdf, newReceipt.details.callId);
         }
 
-        this.router.navigate(['/details', newReceipt?.alap.hivasAzonosito]);
+        this.router.navigate(['/details', newReceipt?.details.callId]);
       } catch (error) {
 
         let errorMessage = 'Ismeretlen hiba történt';
@@ -202,7 +202,7 @@ async submit() {
     }
   }
 
-  downloadBase64Pdf(base64String: string, hivasAzonosito: string) {
+  downloadBase64Pdf(base64String: string, callId: string) {
   return new Promise<void>((resolve) => {
     try {
       const base64Data = base64String.replace(/^data:application\/pdf;base64,/, '');
@@ -217,7 +217,7 @@ async submit() {
       const url = window.URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = url;
-      link.download = `nyugta_${hivasAzonosito}.pdf`;
+      link.download = `nyugta_${callId}.pdf`;
       document.body.appendChild(link);
       link.click();
 
