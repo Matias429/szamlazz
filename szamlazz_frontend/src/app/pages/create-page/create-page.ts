@@ -88,7 +88,7 @@ addItem() {
 
   addPayment() {
     this.paymentList.push(this.fb.group({
-      paymentMethod: ['', Validators.required],
+      meansOfPayment: ['', Validators.required],
       amount: [, [Validators.required, Validators.min(0)]]
     }));
   }

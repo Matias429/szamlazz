@@ -24,7 +24,7 @@ export interface ItemList {
 }
 
 export interface PaymentItem {
-  paymentMethod: string;
+  meansOfPayment: string;
   amount: number;
 }
 
@@ -42,6 +42,7 @@ export interface Details {
   isCancelled: boolean;
   receiptType: string;
   receiptPdf?: string;
+  note?: string;
 }
 
 export interface Receipt {

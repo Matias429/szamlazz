@@ -21,6 +21,7 @@
           <mat-list-item><strong>Fizetési mód:</strong> {{ receipt()!.details.paymentMethod }}</mat-list-item>
           <mat-list-item><strong>Pénznem:</strong> {{ receipt()!.details.currency }}</mat-list-item>
           <mat-list-item><strong>Státusz:</strong> {{ receipt()!.details.isCancelled ? 'Sztornózott' : 'Aktív' }}</mat-list-item>
+          <mat-list-item><strong>Megjegyzés:</strong> {{ receipt()!.details.note || 'Nincs megjegyzés' }}</mat-list-item>
         </mat-list>
         
         <!-- Totals -->
