@@ -33,4 +33,7 @@ public class ReceiptDetailsDto {
 
     @XmlElement(name = "nyugtaPdf")
     private String receiptPdf;
+
+    @XmlElement(name = "megjegyzes")
+    private String note;
 }

@@ -25,6 +25,7 @@ public class ReceiptEntity {
     private Double totalGross;
     private Double totalNet;
     private Double totalVat;
+    private String note;
 
     @OneToMany(mappedBy = "receipt", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ReceiptItemEntity> itemList = new ArrayList<>();

@@ -74,6 +74,9 @@ public class ReceiptPersistenceService {
         data.setPaymentMethod(entity.getPaymentMethod());
         data.setCurrency(entity.getCurrency());
         dto.setDetails(data);
+        if (entity.getNote() != null) {
+            data.setNote(entity.getNote());
+        }
 
         ReceiptItemsDto itemsDto = new ReceiptItemsDto();
         itemsDto.setItemList(entity.getItemList().stream()

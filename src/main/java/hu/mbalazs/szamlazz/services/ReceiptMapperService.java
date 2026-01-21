@@ -27,6 +27,10 @@ public class ReceiptMapperService {
         receipt.setTotalNet(dto.getAmountList().getTotalAmounts().getNet());
         receipt.setTotalVat(dto.getAmountList().getTotalAmounts().getVat());
 
+        if (dto.getDetails().getNote() != null) {
+            receipt.setNote(dto.getDetails().getNote());
+        }
+
         for (ReceiptItemsDto.ReceiptItemDto itemDto : dto.getItemList().getItemList()) {
             ReceiptItemEntity item = new ReceiptItemEntity();
             item.setName(itemDto.getName());

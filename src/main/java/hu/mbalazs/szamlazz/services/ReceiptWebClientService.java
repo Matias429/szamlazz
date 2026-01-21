@@ -34,8 +34,6 @@ public class ReceiptWebClientService {
                 .filename("nyugta.xml")
                 .contentType(MediaType.APPLICATION_XML);
 
-        System.out.println(xml);
-
         return webClient.post()
                 .uri("/szamla/")
                 .contentType(MediaType.MULTIPART_FORM_DATA)
