@@ -45,7 +45,15 @@
 
       <!-- Items -->
       <div class="form-section">
+        <div class="tetel-header">
         <h3>Tételek</h3>
+        @if (hasTetelek) {
+          <div class="total-inline">
+            <span>Összesen: {{ totalBrutto | number:'1.2-2' }} {{ form.get('penznem')?.value }}</span>
+          </div>
+        }
+        </div>
+
         <button type="button" mat-stroked-button (click)="addTetel()" color="primary">
           <mat-icon>add</mat-icon> Új tétel
         </button>
@@ -64,18 +72,10 @@
                   <input matInput type="number" formControlName="mennyiseg">
                 </mat-form-field>
                 
-          <mat-form-field>
-            <mat-label>Egység</mat-label>
-            <input type="text" matInput formControlName="mennyisegiEgyseg" [matAutocomplete]="auto">
-            
-            <mat-icon matSuffix style="font-size: 1.2em; color: gray;">arrow_drop_down</mat-icon>
-
-            <mat-autocomplete #auto="matAutocomplete">
-              @for (option of mennyisegEgysegek; track option) {
-                <mat-option [value]="option">{{ option }}</mat-option>
-              }
-            </mat-autocomplete>
-          </mat-form-field>
+                <mat-form-field>
+                  <mat-label>Egység</mat-label>
+                  <input matInput formControlName="mennyisegiEgyseg">
+                </mat-form-field>
                 
                 <mat-form-field>
                   <mat-label>Nettó egységár</mat-label>
@@ -121,7 +121,17 @@
 
       <!-- Payments -->
       <div class="form-section">
+        <div class="tetel-header">
         <h3>Kifizetések</h3>
+        @if(hasKifizetesek) {
+        <div class="total-inline">
+          <span [class]="remainingAmount > 0 ? 'positive' : 'negative'">
+            {{ remainingAmount | number:'1.2-2' }} {{ form.get('penznem')?.value }} hátra
+          </span>
+        </div>
+      }
+      </div>
+
         <button type="button" mat-stroked-button (click)="addKifizetes()" color="primary">
           <mat-icon>add</mat-icon> Új kifizetés
         </button>
@@ -158,7 +168,7 @@
         <button mat-raised-button 
                 color="accent" 
                 type="submit" 
-                [disabled]="form.invalid || form.get('tetelek')?.errors?.['atLeastOneTetel']">
+                [disabled]="form.invalid || form.get('tetelek')?.errors?.['atLeastOneTetel'] || formInvalidDueToPayments">
           <mat-icon>send</mat-icon>
           Létrehozás
         </button>

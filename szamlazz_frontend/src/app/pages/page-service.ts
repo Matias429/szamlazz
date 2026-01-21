@@ -7,7 +7,7 @@ import { HttpClient } from '@angular/common/http';
   providedIn: 'root',
 })
 export class PageService {
-  private readonly apiUrl = 'http://localhost:8080';
+  private readonly apiUrl = '/backend';
 
   constructor(private http: HttpClient) {}
 

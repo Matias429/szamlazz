@@ -1,40 +1,51 @@
+$primary: var(--mdc-primary, #00bcd4);
+$secondary: var(--mdc-secondary, #ff9800);
+$border-light: rgba(0, 188, 212, 0.2);
+$gradient-card: linear-gradient(135deg, var(--mdc-primary-container, #b2ebf2) 0%, var(--mdc-surface, #ffffff) 100%);
+$gradient-header: linear-gradient(90deg, $primary, $secondary);
+
+@mixin flex-center-gap {
+  display: flex;
+  align-items: center;
+  gap: clamp(0.5rem, 2vw, 0.75rem);
+}
+
+@mixin card-shadow($alpha: 0.2) {
+  box-shadow: 0 clamp(8px, 3vw, 12px) clamp(20px, 8vw, 40px) rgba(0, 188, 212, $alpha);
+}
+
 :host {
+  display: block;
   min-height: 100vh;
   padding: clamp(0.5rem, 3vw, 1rem);
-  
+
   mat-card {
-    background: linear-gradient(135deg, 
-      var(--mdc-primary-container, #b2ebf2) 0%, 
-      var(--mdc-surface, #ffffff) 100%);
-    border-radius: clamp(12px, 4vw, 20px) !important;
-    box-shadow: 0 clamp(8px, 3vw, 12px) clamp(20px, 8vw, 40px) rgba(0, 188, 212, 0.2);
-    border: 1px solid rgba(0, 188, 212, 0.25);
-    overflow: hidden;
     width: 100%;
     max-width: clamp(500px, 95vw, 1400px);
     margin: clamp(1rem, 4vw, 2rem) auto;
-    transition: all 0.3s ease;
-    
+    background: $gradient-card;
+    border-radius: clamp(12px, 4vw, 20px) !important;
+    border: 1px solid rgba(0, 188, 212, 0.25);
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    @include card-shadow();
+
     &:hover {
       box-shadow: 0 clamp(12px, 5vw, 20px) clamp(30px, 12vw, 60px) rgba(0, 188, 212, 0.3);
     }
   }
 
   .mat-mdc-card-header {
-    background: linear-gradient(90deg, 
-      var(--mdc-primary, #00bcd4), 
-      var(--mdc-secondary, #ff9800));
+    background: $gradient-header;
     padding: clamp(1.5rem, 5vw, 2rem);
     position: relative;
-    
+
     &::after {
       content: '';
       position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
+      bottom: 0; left: 0; right: 0;
       height: clamp(4px, 1.5vw, 6px);
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.8), transparent);
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.8), transparent);
     }
   }
 
@@ -42,9 +53,9 @@
     color: white !important;
     font-size: clamp(1.5rem, 6vw, 2.25rem);
     font-weight: 800;
-    text-shadow: 0 clamp(2px, 1vw, 4px) clamp(4px, 2vw, 8px) rgba(0,0,0,0.3);
-    margin: 0;
+    text-shadow: 0 clamp(2px, 1vw, 4px) clamp(4px, 2vw, 8px) rgba(0, 0, 0, 0.3);
     letter-spacing: clamp(-0.02em, -0.5vw, -0.025em);
+    margin: 0;
   }
 
   .info-grid {
@@ -53,33 +64,30 @@
     padding: clamp(1.5rem, 6vw, 2rem) 0;
     margin-bottom: clamp(1.5rem, 6vw, 2rem);
     grid-template-columns: repeat(auto-fit, minmax(clamp(250px, 25vw, 350px), 1fr));
+    
+    @media (min-width: 1400px) { grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); }
   }
 
   h3 {
-    color: var(--mdc-primary, #00bcd4);
+    color: $primary;
     font-size: clamp(1.25rem, 5vw, 1.75rem);
-    margin: clamp(1.5rem, 6vw, 2.5rem) 0 clamp(1rem, 4vw, 1.5rem) 0;
+    margin: clamp(1.5rem, 6vw, 2.5rem) 0 clamp(1rem, 4vw, 1.5rem);
     font-weight: 700;
-    display: flex;
-    align-items: center;
-    gap: clamp(0.5rem, 2vw, 0.75rem);
+    @include flex-center-gap;
   }
 
   mat-list-item {
     padding: clamp(0.75rem, 3vw, 1rem) 0;
-    border-bottom: 1px solid rgba(0, 188, 212, 0.2);
-    
-    &::last-child {
-      border-bottom: none;
-    }
+    border-bottom: 1px solid $border-light;
+    &:last-child { border-bottom: none; }
   }
 
   .totals {
     background: rgba(255, 152, 0, 0.05);
     padding: clamp(1.5rem, 6vw, 2rem);
     border-radius: clamp(8px, 3vw, 16px);
-    border-left: clamp(3px, 1.5vw, 5px) solid var(--mdc-secondary, #ff9800);
-    
+    border-left: clamp(3px, 1.5vw, 5px) solid $secondary;
+
     h3 { margin-bottom: clamp(0.75rem, 3vw, 1.5rem); }
     p { 
       margin: clamp(0.5rem, 2vw, 0.75rem) 0;
@@ -88,109 +96,79 @@
     }
   }
 
-  .table-container {
-    overflow-x: auto;
-    margin: clamp(1rem, 4vw, 2rem) 0;
-    border-radius: clamp(8px, 3vw, 12px);
-    box-shadow: 0 clamp(4px, 2vw, 8px) clamp(12px, 6vw, 24px) rgba(0, 0, 0, 0.1);
-  }
-
   .nav-bar {
     display: flex;
-    gap: clamp(0.75rem, 3vw, 1rem);
     justify-content: center;
+    gap: clamp(0.75rem, 3vw, 1rem);
     padding: clamp(1.5rem, 6vw, 2rem);
-    background: linear-gradient(135deg, 
-      rgba(0, 188, 212, 0.1), 
-      rgba(255, 152, 0, 0.1));
-    border-top: 1px solid rgba(0, 188, 212, 0.2);
+    background: linear-gradient(135deg, rgba(0, 188, 212, 0.1), rgba(255, 152, 0, 0.1));
+    border-top: 1px solid $border-light;
     margin-top: clamp(1.5rem, 6vw, 2rem);
-    
+
     @media (max-width: 768px) {
       flex-direction: column;
-      .nav-btn {
-        width: 100%;
-        max-width: clamp(250px, 80vw, 400px);
-        margin: 0 auto;
-      }
+      .nav-btn { width: 100%; max-width: 400px; margin: 0 auto; }
     }
   }
 
-  // Component-specific styles
   .tipus-badge {
-    background: rgba(255, 255, 255, 0.2);
     padding: 0.25rem 0.75rem;
     border-radius: 20px;
     font-size: 0.875rem;
     font-weight: 600;
     margin-left: 1rem;
-    
+    background: rgba(255, 255, 255, 0.2);
+
     &.active { background: rgba(0, 255, 127, 0.3); color: #00ff7f; }
     &.storno { background: rgba(255, 99, 71, 0.3); color: #ff6347; }
   }
 }
 
-// Table overrides (FIXED WHITE TEXT)
 :host ::ng-deep {
+  .table-container {
+    overflow-x: auto;
+    margin: clamp(1rem, 4vw, 2rem) 0;
+    border-radius: clamp(8px, 3vw, 12px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  }
+
   .mat-mdc-header-cell {
     background: linear-gradient(135deg, #00bcd4 0%, #0288d1 100%) !important;
     color: white !important;
-    text-shadow: 0 1px 2px rgba(0,0,0,0.3) !important;
     font-weight: 700 !important;
-    font-size: clamp(0.875rem, 3vw, 1rem) !important;
     border-bottom: clamp(2px, 1vw, 3px) solid rgba(255, 152, 0, 0.4) !important;
-    padding: clamp(12px, 4vw, 16px) clamp(12px, 4vw, 20px) !important;
-    
+    padding: 12px 16px !important;
     * { color: white !important; }
   }
 
   .mat-mdc-cell {
-    padding: clamp(10px, 3vw, 16px) clamp(12px, 4vw, 20px) !important;
+    padding: 10px 16px !important;
     border-bottom: 1px solid rgba(0, 188, 212, 0.15);
-    font-size: clamp(0.875rem, 3vw, 1rem);
   }
 
   .mat-mdc-row {
+    transition: background-color 0.2s;
     &:hover { background-color: rgba(255, 152, 0, 0.1) !important; }
     &:nth-child(even) { background-color: rgba(0, 188, 212, 0.03); }
   }
 
   .brutto-cell, .amount-cell {
     font-weight: 700 !important;
-    color: var(--mdc-secondary, #ff9800) !important;
+    color: $secondary !important;
   }
 }
 
-// Dark mode
 @media (prefers-color-scheme: dark) {
-  mat-card {
-    background: linear-gradient(135deg, 
-      color-mix(in srgb, var(--mdc-primary) 20%, var(--mdc-surface)) 0%, 
-      var(--mdc-surface) 100%);
-    border-color: rgba(0, 188, 212, 0.4);
-    box-shadow: 0 clamp(8px, 3vw, 12px) clamp(20px, 8vw, 40px) rgba(0, 0, 0, 0.5);
-  }
-
-  .totals { 
-    background: rgba(255, 152, 0, 0.15);
-    border-left-color: var(--mdc-secondary, #ffb74d);
-  }
-
-  mat-list-item { border-bottom-color: rgba(0, 188, 212, 0.3); }
-  .mat-mdc-row:nth-child(even) { background-color: rgba(255, 255, 255, 0.08); }
-  .nav-bar { 
-    background: linear-gradient(135deg, 
-      rgba(0, 188, 212, 0.2), 
-      rgba(255, 152, 0, 0.2));
+  :host {
+    mat-card {
+      background: linear-gradient(135deg, color-mix(in srgb, $primary 20%, var(--mdc-surface)) 0%, var(--mdc-surface) 100%);
+      @include card-shadow(0.5);
+    }
+    .totals { background: rgba(255, 152, 0, 0.15); }
+    .mat-mdc-row:nth-child(even) { background-color: rgba(255, 255, 255, 0.05); }
   }
 }
 
-// Ultra responsive
 @media (max-width: 480px) {
   :host { padding: 0.25rem; }
-  mat-card { margin: clamp(0.5rem, 3vw, 1rem); }
-}
-
-@media (min-width: 1400px) {
-  .info-grid { grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); }
 }

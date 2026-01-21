@@ -50,7 +50,6 @@ export class CreatePage {
     'SZÉP kártya', 'Utalvány'
   ];
   penznemOptions = ['HUF', 'EUR', 'USD', 'NOK', 'GBP', 'CHF', 'JPY', 'CNY', 'CZK', 'PLN', 'AUD', 'CAD'];
-  mennyisegEgysegek = ['db', 'kg', 'óra', 'perc'];
   afakulcsOptions = [
     '0', '5', '10', '27', 
     'AAM', 'TAM', 'EU', 'EUK', 
@@ -66,10 +65,10 @@ export class CreatePage {
 
   addTetel() {
     const group = this.fb.group({
-      megnevezes: ['', Validators.required],
-      mennyiseg: [1, [Validators.required, Validators.min(0.01)]],
-      mennyisegiEgyseg: ['db', Validators.required],
-      nettoEgysegar: [0, [Validators.required, Validators.min(0)]],
+      megnevezes: [, Validators.required],
+      mennyiseg: [, [Validators.required, Validators.min(0.01)]],
+      mennyisegiEgyseg: [, Validators.required],
+      nettoEgysegar: [, [Validators.required, Validators.min(0)]],
       afakulcs: [this.afakulcsOptions[3], Validators.required],
       netto: [0, {value: 0, disabled: true}],
       afa: [0, {value: 0, disabled: true}],  
@@ -125,6 +124,32 @@ export class CreatePage {
     });
   }
 
+  get totalBrutto(): number {
+  return this.tetelekArray.controls
+    .filter(control => control.get('brutto')?.value)
+    .reduce((sum, control) => sum + (control.get('brutto')?.value || 0), 0);
+  }
+
+  get hasTetelek(): boolean {
+    return this.tetelekArray.length > 0;
+  }
+
+  get totalKifizetesek(): number {
+    return this.kifizetesekArray.controls
+      .reduce((sum, control) => sum + (control.get('osszeg')?.value || 0), 0);
+  }
+
+  get hasKifizetesek(): boolean {
+    return this.kifizetesekArray.length > 0;
+  }
+
+  get remainingAmount(): number {
+    return this.hasTetelek ? this.totalBrutto - this.totalKifizetesek : 0;
+  }
+
+  get formInvalidDueToPayments(): boolean {
+    return this.hasKifizetesek && Math.abs(this.remainingAmount) > 0;
+  }
 
 async submit() {
     if (this.form.valid) {
