@@ -38,3 +38,13 @@ dependencies {
 tasks.named('test') {
 	useJUnitPlatform()
 }
+
+bootJar {
+	archiveFileName = "app.jar"
+}
+
+tasks.named('bootBuildImage') {
+	imageName = 'balma14/szamlazz:backend'
+	environment = ['BP_JVM_VERSION': '21']
+}
+

@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
+@CrossOrigin(origins = "http://frontend:8443")
 public class ReceiptController {
 
     private final ReceiptWebClientService client;
@@ -20,7 +21,6 @@ public class ReceiptController {
         this.persistenceService = persistenceService;
     }
 
-    @CrossOrigin(origins = "http://localhost:4200")
     @PostMapping(value = "/createReceipt")
     public ResponseEntity<?> createReceipt(@RequestBody CreateReceiptDto createReceiptDto) {
 
@@ -42,14 +42,12 @@ public class ReceiptController {
         }
     }
 
-    @CrossOrigin(origins = "http://localhost:4200")
     @GetMapping("/getReceipts")
     public ResponseEntity<List<ReceiptDto>> getReceipts() {
         List<ReceiptDto> receipts = persistenceService.getAllReceipts();
         return ResponseEntity.ok(receipts);
     }
 
-    @CrossOrigin(origins = "http://localhost:4200")
     @GetMapping("/getReceipt/{hivasAzonosito}")
     public ResponseEntity<ReceiptDto> getReceipt(@PathVariable String hivasAzonosito) {
         ReceiptDto receipt = persistenceService.getReceiptByHivasAzonosito(hivasAzonosito);
