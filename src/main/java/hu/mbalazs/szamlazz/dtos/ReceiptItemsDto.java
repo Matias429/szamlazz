@@ -12,19 +12,35 @@ import java.util.List;
 public class ReceiptItemsDto {
 
     @XmlElement(name = "tetel")
-    private List<ReceiptItemDto> items;
+    private List<ReceiptItemDto> itemList;
 
     @Data
     @XmlAccessorType(XmlAccessType.FIELD)
     public static class ReceiptItemDto {
-        private String megnevezes;
-        private Double mennyiseg;
-        private String mennyisegiEgyseg;
-        private Double nettoEgysegar;
-        private String afakulcs;
-        private Double netto;
-        private Double afa;
-        private Double brutto;
+
+        @XmlElement(name = "megnevezes")
+        private String name;
+
+        @XmlElement(name = "mennyiseg")
+        private Double amount;
+
+        @XmlElement(name = "mennyisegiegyseg")
+        private String unitOfMeasure;
+
+        @XmlElement(name = "nettoEgysegar")
+        private Double netUnitPrice;
+
+        @XmlElement(name = "afakulcs")
+        private String vatRate;
+
+        @XmlElement(name = "netto")
+        private Double net;
+
+        @XmlElement(name = "afa")
+        private Double vat;
+
+        @XmlElement(name = "brutto")
+        private Double gross;
 
     }
 }

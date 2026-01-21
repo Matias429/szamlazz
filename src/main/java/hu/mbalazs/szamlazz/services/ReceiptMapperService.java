@@ -15,37 +15,37 @@ public class ReceiptMapperService {
 
         ReceiptEntity receipt = new ReceiptEntity();
 
-        receipt.setId(dto.getAlap().getId());
-        receipt.setHivasAzonosito(dto.getAlap().getHivasAzonosito());
-        receipt.setNyugtaszam(dto.getAlap().getNyugtaszam());
-        receipt.setTipus(dto.getAlap().getTipus());
-        receipt.setStornozott(dto.getAlap().getStornozott());
-        receipt.setKelt(dto.getAlap().getKelt());
-        receipt.setFizmod(dto.getAlap().getFizmod());
-        receipt.setPenznem(dto.getAlap().getPenznem());
-        receipt.setVegosszegBrutto(dto.getOsszegek().getTotalossz().getBrutto());
-        receipt.setVegosszegNetto(dto.getOsszegek().getTotalossz().getNetto());
-        receipt.setVegosszegAfa(dto.getOsszegek().getTotalossz().getAfa());
+        receipt.setId(dto.getDetails().getId());
+        receipt.setCallId(dto.getDetails().getCallId());
+        receipt.setReceiptNumber(dto.getDetails().getReceiptNumber());
+        receipt.setReceiptType(dto.getDetails().getReceiptType());
+        receipt.setIsCancelled(dto.getDetails().getIsCancelled());
+        receipt.setReceiptDate(dto.getDetails().getReceiptDate());
+        receipt.setPaymentMethod(dto.getDetails().getPaymentMethod());
+        receipt.setCurrency(dto.getDetails().getCurrency());
+        receipt.setTotalGross(dto.getAmountList().getTotalAmounts().getGross());
+        receipt.setTotalNet(dto.getAmountList().getTotalAmounts().getNet());
+        receipt.setTotalVat(dto.getAmountList().getTotalAmounts().getVat());
 
-        for (ReceiptItemsDto.ReceiptItemDto itemDto : dto.getTetelek().getItems()) {
+        for (ReceiptItemsDto.ReceiptItemDto itemDto : dto.getItemList().getItemList()) {
             ReceiptItemEntity item = new ReceiptItemEntity();
-            item.setMegnevezes(itemDto.getMegnevezes());
-            item.setMennyiseg(itemDto.getMennyiseg());
-            item.setMennyisegiEgyseg(itemDto.getMennyisegiEgyseg());
-            item.setNettoEgysegar(itemDto.getNettoEgysegar());
-            item.setAfakulcs(itemDto.getAfakulcs());
-            item.setNetto(itemDto.getNetto());
-            item.setAfa(itemDto.getAfa());
-            item.setBrutto(itemDto.getBrutto());
+            item.setName(itemDto.getName());
+            item.setAmount(itemDto.getAmount());
+            item.setUnitOfMeasure(itemDto.getUnitOfMeasure());
+            item.setNetUnitPrice(itemDto.getNetUnitPrice());
+            item.setVatRate(itemDto.getVatRate());
+            item.setNet(itemDto.getNet());
+            item.setVat(itemDto.getVat());
+            item.setGross(itemDto.getGross());
 
             receipt.addReceiptItem(item);
         }
 
-        if (dto.getKifizetesek() != null) {
-            for (PaymentItemsDto.PaymentItemDto payDto : dto.getKifizetesek().getItems()) {
+        if (dto.getPaymentList() != null) {
+            for (PaymentItemsDto.PaymentItemDto payDto : dto.getPaymentList().getPaymentList()) {
                 PaymentItemEntity payment = new PaymentItemEntity();
-                payment.setFizetoeszkoz(payDto.getFizetoeszkoz());
-                payment.setOsszeg(payDto.getOsszeg());
+                payment.setMeansOfPayment(payDto.getMeansOfPayment());
+                payment.setAmount(payDto.getAmount());
 
                 receipt.addPaymentItem(payment);
             }

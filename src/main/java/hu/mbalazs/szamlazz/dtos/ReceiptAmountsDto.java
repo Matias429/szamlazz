@@ -10,13 +10,19 @@ import lombok.Data;
 public class ReceiptAmountsDto {
 
     @XmlElement(name = "totalossz")
-    private TotalAmounts totalossz;
+    private TotalAmounts totalAmounts;
 
     @Data
     @XmlAccessorType(XmlAccessType.FIELD)
     public static class TotalAmounts {
-        private Double netto;
-        private Double afa;
-        private Double brutto;
+
+        @XmlElement(name = "netto")
+        private Double net;
+
+        @XmlElement(name = "afa")
+        private Double vat;
+
+        @XmlElement(name = "brutto")
+        private Double gross;
     }
 }

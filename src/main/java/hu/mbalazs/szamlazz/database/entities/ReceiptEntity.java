@@ -10,35 +10,35 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-@Table(name = "nyugta")
+@Table(name = "receipt")
 public class ReceiptEntity {
 
     @Id
     private Long id;
-    private String hivasAzonosito;
-    private String nyugtaszam;
-    private String tipus;
-    private Boolean stornozott;
-    private String kelt;
-    private String fizmod;
-    private String penznem;
-    private Double vegosszegBrutto;
-    private Double vegosszegNetto;
-    private Double vegosszegAfa;
+    private String callId;
+    private String receiptNumber;
+    private String receiptType;
+    private Boolean isCancelled;
+    private String receiptDate;
+    private String paymentMethod;
+    private String currency;
+    private Double totalGross;
+    private Double totalNet;
+    private Double totalVat;
 
-    @OneToMany(mappedBy = "nyugta", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ReceiptItemEntity> tetelek = new ArrayList<>();
+    @OneToMany(mappedBy = "receipt", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ReceiptItemEntity> itemList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "nyugta", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<PaymentItemEntity> kifizetesek = new ArrayList<>();
+    @OneToMany(mappedBy = "receipt", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<PaymentItemEntity> paymentList = new ArrayList<>();
 
     public void addReceiptItem(ReceiptItemEntity item) {
-        tetelek.add(item);
+        itemList.add(item);
         item.setReceipt(this);
     }
 
     public void addPaymentItem(PaymentItemEntity item) {
-        kifizetesek.add(item);
+        paymentList.add(item);
         item.setReceipt(this);
     }
 }

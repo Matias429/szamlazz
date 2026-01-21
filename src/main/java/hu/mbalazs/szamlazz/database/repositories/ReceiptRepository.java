@@ -9,5 +9,5 @@ public interface ReceiptRepository extends JpaRepository<ReceiptEntity, Long> {
 
     List<ReceiptEntity> findAll();
 
-    ReceiptEntity findByHivasAzonosito(String hivasAzonosito);
+    ReceiptEntity findByCallId(String callId);
 }

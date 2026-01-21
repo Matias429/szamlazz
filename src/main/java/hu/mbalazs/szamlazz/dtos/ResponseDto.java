@@ -12,17 +12,17 @@ import lombok.Data;
 public class ResponseDto {
 
     @XmlElement(name = "sikeres")
-    private Boolean sikeres;
+    private Boolean successful;
 
     @XmlElement(name = "nyugtaPdf")
-    private String nyugtaPdf;
+    private String receiptPdf;
 
     @XmlElement(name = "nyugta")
-    private ReceiptDto nyugta;
+    private ReceiptDto receipt;
 
     @XmlElement(name = "hibakod")
-    private String hibakod;
+    private String errorCode;
 
     @XmlElement(name = "hibauzenet")
-    private String hibauzenet;
+    private String errorMessage;
 }

@@ -8,11 +8,11 @@ import java.util.List;
 @Getter
 @Setter
 public class CreateReceiptDto {
-    private Boolean pdfLetoltes;
-    private String elotag;
-    private String fizmod;
-    private String penznem;
-    private String megjegyzes;
-    private List<ReceiptItemsDto.ReceiptItemDto> tetelek;
-    private List<PaymentItemsDto.PaymentItemDto> kifizetesek;
+    private Boolean pdfDownload;
+    private String prefix;
+    private String paymentMethod;
+    private String currency;
+    private String note;
+    private List<ReceiptItemsDto.ReceiptItemDto> itemList;
+    private List<PaymentItemsDto.PaymentItemDto> paymentList;
 }

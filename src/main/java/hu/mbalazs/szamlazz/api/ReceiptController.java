@@ -26,13 +26,13 @@ public class ReceiptController {
 
         String response = client.createReceipt(
                 "CID-" + System.currentTimeMillis(),
-                createReceiptDto.getPdfLetoltes(),
-                createReceiptDto.getElotag(),
-                createReceiptDto.getFizmod(),
-                createReceiptDto.getPenznem(),
-                Optional.ofNullable(createReceiptDto.getMegjegyzes()),
-                createReceiptDto.getTetelek(),
-                Optional.ofNullable(createReceiptDto.getKifizetesek())
+                createReceiptDto.getPdfDownload(),
+                createReceiptDto.getPrefix(),
+                createReceiptDto.getPaymentMethod(),
+                createReceiptDto.getCurrency(),
+                Optional.ofNullable(createReceiptDto.getNote()),
+                createReceiptDto.getItemList(),
+                Optional.ofNullable(createReceiptDto.getPaymentList())
         );
         try {
             ReceiptDto receipt = persistenceService.saveReceiptFromXml(response);
@@ -48,9 +48,9 @@ public class ReceiptController {
         return ResponseEntity.ok(receipts);
     }
 
-    @GetMapping("/getReceipt/{hivasAzonosito}")
-    public ResponseEntity<ReceiptDto> getReceipt(@PathVariable String hivasAzonosito) {
-        ReceiptDto receipt = persistenceService.getReceiptByHivasAzonosito(hivasAzonosito);
+    @GetMapping("/getReceipt/{callId}")
+    public ResponseEntity<ReceiptDto> getReceipt(@PathVariable String callId) {
+        ReceiptDto receipt = persistenceService.getReceiptByCallId(callId);
         return ResponseEntity.ok(receipt);
     }
 }

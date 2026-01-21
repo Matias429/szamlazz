@@ -44,7 +44,7 @@ bootJar {
 }
 
 tasks.named('bootBuildImage') {
-	imageName = 'balma14/szamlazz:backend'
+	imageName = 'balma14/szamlazz:backend-latest'
 	environment = ['BP_JVM_VERSION': '21']
 }
 

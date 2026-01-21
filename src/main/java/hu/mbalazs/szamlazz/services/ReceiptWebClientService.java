@@ -24,10 +24,10 @@ public class ReceiptWebClientService {
         this.xmlGeneratorService = xmlGeneratorService;
     }
 
-    public String createReceipt(String hivasazonosito, Boolean pdfLetoltes, String elotag, String fizmod, String penznem, Optional<String> megjegyzes,
-                                List<ReceiptItemsDto.ReceiptItemDto> tetelek, Optional<List<PaymentItemsDto.PaymentItemDto>> kifizetesek) {
+    public String createReceipt(String callId, Boolean pdfDownload, String prefix, String paymentMethod, String currency, Optional<String> note,
+                                List<ReceiptItemsDto.ReceiptItemDto> itemList, Optional<List<PaymentItemsDto.PaymentItemDto>> paymentList) {
 
-        String xml = xmlGeneratorService.parseDataToXml(hivasazonosito, pdfLetoltes, elotag, fizmod, penznem, megjegyzes, tetelek, kifizetesek);
+        String xml = xmlGeneratorService.parseDataToXml(callId, pdfDownload, prefix, paymentMethod, currency, note, itemList, paymentList);
         MultipartBodyBuilder bodyBuilder = new MultipartBodyBuilder();
         bodyBuilder
                 .part("action-szamla_agent_nyugta_create", xml)

@@ -8,28 +8,28 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name = "tetel")
+@Table(name = "item")
 public class ReceiptItemEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String megnevezes;
-    private Double mennyiseg;
-    private String mennyisegiEgyseg;
-    private Double nettoEgysegar;
-    private String afakulcs;
-    private Double netto;
-    private Double afa;
-    private Double brutto;
+    private String name;
+    private Double amount;
+    private String unitOfMeasure;
+    private Double netUnitPrice;
+    private String vatRate;
+    private Double net;
+    private Double vat;
+    private Double gross;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "nyugta_id", nullable = false)
+    @JoinColumn(name = "receipt_id", nullable = false)
     @JsonIgnore
-    private ReceiptEntity nyugta;
+    private ReceiptEntity receipt;
 
-    public void setReceipt(ReceiptEntity nyugta) {
-        this.nyugta = nyugta;
+    public void setReceipt(ReceiptEntity receipt) {
+        this.receipt = receipt;
     }
 
 }

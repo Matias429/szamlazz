@@ -12,12 +12,16 @@ import java.util.List;
 public class PaymentItemsDto {
 
     @XmlElement(name = "kifizetes")
-    private List<PaymentItemDto> items;
+    private List<PaymentItemDto> paymentList;
 
     @Data
     @XmlAccessorType(XmlAccessType.FIELD)
     public static class PaymentItemDto {
-        private String fizetoeszkoz;
-        private Double osszeg;
+        
+        @XmlElement(name = "fizetoeszkoz")
+        private String meansOfPayment;
+        
+        @XmlElement(name = "osszeg")
+        private Double amount;
     }
 }

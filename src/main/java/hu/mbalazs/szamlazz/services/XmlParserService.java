@@ -16,15 +16,15 @@ public class XmlParserService {
             Unmarshaller unmarshaller = context.createUnmarshaller();
             ResponseDto response = (ResponseDto) unmarshaller.unmarshal(new StringReader(xml));
 
-            if (!response.getSikeres()) {
+            if (!response.getSuccessful()) {
                 System.out.println(response);
-                throw new IllegalStateException(response.getHibauzenet());
+                throw new IllegalStateException(response.getErrorMessage());
             }
 
-            if (response.getNyugtaPdf() != null) {
-                response.getNyugta().getAlap().setNyugtaPdf(response.getNyugtaPdf());
+            if (response.getReceiptPdf() != null) {
+                response.getReceipt().getDetails().setReceiptPdf(response.getReceiptPdf());
             }
-            return response.getNyugta();
+            return response.getReceipt();
         } catch (Exception e) {
             throw new IllegalStateException(e.getMessage());
         }

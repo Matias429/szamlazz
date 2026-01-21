@@ -26,8 +26,8 @@ public class XmlGeneratorService {
         this.agentId = agentId;
     }
 
-    public String parseDataToXml(String hivasazonosito, Boolean pdfLetoltes, String elotag, String fizmod, String penznem,
-                                 Optional<String> megjegyes, List<ReceiptItemsDto.ReceiptItemDto> tetelek, Optional<List<PaymentItemsDto.PaymentItemDto>> kifizetesek) {
+    public String parseDataToXml(String callId, Boolean pdfDownload, String prefix, String paymentMethod, String currency,
+                                 Optional<String> note, List<ReceiptItemsDto.ReceiptItemDto> itemList, Optional<List<PaymentItemsDto.PaymentItemDto>> paymentList) {
         try {
             Document document = DocumentBuilderFactory
                     .newInstance()
@@ -35,102 +35,102 @@ public class XmlGeneratorService {
                     .newDocument();
 
             // Root element
-            Element nyugtaCreate = document.createElement("xmlnyugtacreate");
-            document.appendChild(nyugtaCreate);
-            nyugtaCreate.setAttribute("xmlns", "http://www.szamlazz.hu/xmlnyugtacreate");
-            nyugtaCreate.setAttribute(("xmlns:xsi"), "http://www.w3.org/2001/XMLSchema-instance");
-            nyugtaCreate.setAttribute(("xsi:schemaLocation"), "http://www.szamlazz.hu/xmlnyugtacreate http://www.szamlazz.hu/xmlnyugtacreate.xsd");
+            Element receiptCreateElement = document.createElement("xmlnyugtacreate");
+            document.appendChild(receiptCreateElement);
+            receiptCreateElement.setAttribute("xmlns", "http://www.szamlazz.hu/xmlnyugtacreate");
+            receiptCreateElement.setAttribute(("xmlns:xsi"), "http://www.w3.org/2001/XMLSchema-instance");
+            receiptCreateElement.setAttribute(("xsi:schemaLocation"), "http://www.szamlazz.hu/xmlnyugtacreate http://www.szamlazz.hu/xmlnyugtacreate.xsd");
 
             // Beallitasok
-            Element beallitasok = document.createElement("beallitasok");
-            Element szamlaagentkulcsElement = document.createElement("szamlaagentkulcs");
-            Element pdfLetoltesElement = document.createElement("pdfLetoltes");
-            szamlaagentkulcsElement.setTextContent(this.agentId);
-            pdfLetoltesElement.setTextContent(pdfLetoltes.toString());
-            beallitasok.appendChild(szamlaagentkulcsElement);
-            beallitasok.appendChild(pdfLetoltesElement);
-            nyugtaCreate.appendChild(beallitasok);
+            Element settingsElement = document.createElement("beallitasok");
+            Element accountAgentIdElement = document.createElement("szamlaagentkulcs");
+            Element pdfDownloadElement = document.createElement("pdfLetoltes");
+            accountAgentIdElement.setTextContent(this.agentId);
+            pdfDownloadElement.setTextContent(pdfDownload.toString());
+            settingsElement.appendChild(accountAgentIdElement);
+            settingsElement.appendChild(pdfDownloadElement);
+            receiptCreateElement.appendChild(settingsElement);
 
             // Fejlec
-            Element fejlec = document.createElement("fejlec");
-            Element hivasAzonositoElement = document.createElement("hivasAzonosito");
-            Element elotagElement = document.createElement("elotag");
-            Element fizmodElement = document.createElement("fizmod");
-            Element penznemElement = document.createElement("penznem");
-            elotagElement.setTextContent(elotag);
-            fizmodElement.setTextContent(fizmod);
-            penznemElement.setTextContent(penznem);
-            hivasAzonositoElement.setTextContent(hivasazonosito);
-            fejlec.appendChild(hivasAzonositoElement);
-            fejlec.appendChild(elotagElement);
-            fejlec.appendChild(fizmodElement);
-            fejlec.appendChild(penznemElement);
-            if (megjegyes.isPresent()) {
-                Element megjegyesElement = document.createElement("megjegyzes");
-                megjegyesElement.setTextContent(megjegyes.get());
-                fejlec.appendChild(megjegyesElement);
+            Element headerElement = document.createElement("fejlec");
+            Element callIdElement = document.createElement("hivasAzonosito");
+            Element prefixElement = document.createElement("elotag");
+            Element paymentMethodElement = document.createElement("fizmod");
+            Element currencyElement = document.createElement("penznem");
+            prefixElement.setTextContent(prefix);
+            paymentMethodElement.setTextContent(paymentMethod);
+            currencyElement.setTextContent(currency);
+            callIdElement.setTextContent(callId);
+            headerElement.appendChild(callIdElement);
+            headerElement.appendChild(prefixElement);
+            headerElement.appendChild(paymentMethodElement);
+            headerElement.appendChild(currencyElement);
+            if (note.isPresent()) {
+                Element noteElement = document.createElement("megjegyzes");
+                noteElement.setTextContent(note.get());
+                headerElement.appendChild(noteElement);
             }
-            nyugtaCreate.appendChild(fejlec);
+            receiptCreateElement.appendChild(headerElement);
 
             // Tetelek
-            Element tetelekElement = document.createElement("tetelek");
-            for (ReceiptItemsDto.ReceiptItemDto item : tetelek) {
-                Element tetel = document.createElement("tetel");
+            Element itemListElement = document.createElement("tetelek");
+            for (ReceiptItemsDto.ReceiptItemDto item : itemList) {
+                Element itemElement = document.createElement("tetel");
 
-                Element megnevezes = document.createElement("megnevezes");
-                megnevezes.setTextContent(item.getMegnevezes());
-                tetel.appendChild(megnevezes);
+                Element nameElement = document.createElement("megnevezes");
+                nameElement.setTextContent(item.getName());
+                itemElement.appendChild(nameElement);
 
-                Element mennyiseg = document.createElement("mennyiseg");
-                mennyiseg.setTextContent(item.getMennyiseg().toString());
-                tetel.appendChild(mennyiseg);
+                Element amountElement = document.createElement("mennyiseg");
+                amountElement.setTextContent(item.getAmount().toString());
+                itemElement.appendChild(amountElement);
 
-                Element mennyisegiEgyseg = document.createElement("mennyisegiEgyseg");
-                mennyisegiEgyseg.setTextContent(item.getMennyisegiEgyseg());
-                tetel.appendChild(mennyisegiEgyseg);
+                Element unitOfMeasureElement = document.createElement("mennyisegiEgyseg");
+                unitOfMeasureElement.setTextContent(item.getUnitOfMeasure());
+                itemElement.appendChild(unitOfMeasureElement);
 
-                Element nettoEgysegar = document.createElement("nettoEgysegar");
-                nettoEgysegar.setTextContent(item.getNettoEgysegar().toString());
-                tetel.appendChild(nettoEgysegar);
+                Element netUnitPriceElement = document.createElement("nettoEgysegar");
+                netUnitPriceElement.setTextContent(item.getNetUnitPrice().toString());
+                itemElement.appendChild(netUnitPriceElement);
 
-                Element afakulcs = document.createElement("afakulcs");
-                afakulcs.setTextContent(item.getAfakulcs());
-                tetel.appendChild(afakulcs);
+                Element vatRateElement = document.createElement("afakulcs");
+                vatRateElement.setTextContent(item.getVatRate());
+                itemElement.appendChild(vatRateElement);
 
-                Element netto = document.createElement("netto");
-                netto.setTextContent(item.getNetto().toString());
-                tetel.appendChild(netto);
+                Element netElement = document.createElement("netto");
+                netElement.setTextContent(item.getNet().toString());
+                itemElement.appendChild(netElement);
 
-                Element afa = document.createElement("afa");
-                afa.setTextContent(item.getAfa().toString());
-                tetel.appendChild(afa);
+                Element vatElement = document.createElement("afa");
+                vatElement.setTextContent(item.getVat().toString());
+                itemElement.appendChild(vatElement);
 
-                Element brutto = document.createElement("brutto");
-                brutto.setTextContent(item.getBrutto().toString());
-                tetel.appendChild(brutto);
+                Element grossElement = document.createElement("brutto");
+                grossElement.setTextContent(item.getGross().toString());
+                itemElement.appendChild(grossElement);
 
-                tetelekElement.appendChild(tetel);
+                itemListElement.appendChild(itemElement);
             }
-            nyugtaCreate.appendChild(tetelekElement);
+            receiptCreateElement.appendChild(itemListElement);
 
             // Kifizetesek
 
-            if (kifizetesek.isPresent()) {
-                Element kifizetesekElement = document.createElement("kifizetesek");
-                for (PaymentItemsDto.PaymentItemDto payment : kifizetesek.get()) {
-                    Element kifizetes = document.createElement("kifizetes");
+            if (paymentList.isPresent()) {
+                Element paymentListElement = document.createElement("kifizetesek");
+                for (PaymentItemsDto.PaymentItemDto payment : paymentList.get()) {
+                    Element paymentElement = document.createElement("kifizetes");
 
-                    Element fizetoeszkoz = document.createElement("fizetoeszkoz");
-                    fizetoeszkoz.setTextContent(payment.getFizetoeszkoz());
-                    kifizetes.appendChild(fizetoeszkoz);
+                    Element meansOfPaymentElement = document.createElement("fizetoeszkoz");
+                    meansOfPaymentElement.setTextContent(payment.getMeansOfPayment());
+                    paymentElement.appendChild(meansOfPaymentElement);
 
-                    Element osszeg = document.createElement("osszeg");
-                    osszeg.setTextContent(payment.getOsszeg().toString());
-                    kifizetes.appendChild(osszeg);
+                    Element amountElement = document.createElement("osszeg");
+                    amountElement.setTextContent(payment.getAmount().toString());
+                    paymentElement.appendChild(amountElement);
 
-                    kifizetesekElement.appendChild(kifizetes);
+                    paymentListElement.appendChild(paymentElement);
                 }
-                nyugtaCreate.appendChild(kifizetesekElement);
+                receiptCreateElement.appendChild(paymentListElement);
             }
 
 

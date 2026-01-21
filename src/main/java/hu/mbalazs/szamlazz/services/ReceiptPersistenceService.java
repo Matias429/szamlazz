@@ -56,8 +56,8 @@ public class ReceiptPersistenceService {
         return repository.findAll().stream().map(this::entityToDtoMapper).toList();
     }
 
-    public ReceiptDto getReceiptByHivasAzonosito(String hivasAzonosito) {
-        ReceiptEntity entity = repository.findByHivasAzonosito(hivasAzonosito);
+    public ReceiptDto getReceiptByCallId(String callId) {
+        ReceiptEntity entity = repository.findByCallId(callId);
         return entityToDtoMapper(entity);
     }
 
@@ -66,51 +66,51 @@ public class ReceiptPersistenceService {
 
         ReceiptDetailsDto data = new ReceiptDetailsDto();
         data.setId(entity.getId());
-        data.setHivasAzonosito(entity.getHivasAzonosito());
-        data.setNyugtaszam(entity.getNyugtaszam());
-        data.setTipus(entity.getTipus());
-        data.setStornozott(entity.getStornozott());
-        data.setKelt(entity.getKelt());
-        data.setFizmod(entity.getFizmod());
-        data.setPenznem(entity.getPenznem());
-        dto.setAlap(data);
+        data.setCallId(entity.getCallId());
+        data.setReceiptNumber(entity.getReceiptNumber());
+        data.setReceiptType(entity.getReceiptType());
+        data.setIsCancelled(entity.getIsCancelled());
+        data.setReceiptDate(entity.getReceiptDate());
+        data.setPaymentMethod(entity.getPaymentMethod());
+        data.setCurrency(entity.getCurrency());
+        dto.setDetails(data);
 
         ReceiptItemsDto itemsDto = new ReceiptItemsDto();
-        itemsDto.setItems(entity.getTetelek().stream()
+        itemsDto.setItemList(entity.getItemList().stream()
                 .map(item -> {
                     ReceiptItemsDto.ReceiptItemDto itemDto = new ReceiptItemsDto.ReceiptItemDto();
-                    itemDto.setMegnevezes(item.getMegnevezes());
-                    itemDto.setMennyiseg(item.getMennyiseg());
-                    itemDto.setMennyisegiEgyseg(item.getMennyisegiEgyseg());
-                    itemDto.setNettoEgysegar(item.getNettoEgysegar());
-                    itemDto.setNetto(item.getNetto());
-                    itemDto.setAfa(item.getAfa());
-                    itemDto.setBrutto(item.getBrutto());
-                    itemDto.setAfakulcs(item.getAfakulcs());
+                    itemDto.setName(item.getName());
+                    itemDto.setAmount(item.getAmount());
+                    itemDto.setUnitOfMeasure(item.getUnitOfMeasure());
+                    itemDto.setNetUnitPrice(item.getNetUnitPrice());
+                    itemDto.setNet(item.getNet());
+                    itemDto.setVat(item.getVat());
+                    itemDto.setGross(item.getGross());
+                    itemDto.setVatRate(item.getVatRate());
                     return itemDto;
                 }).toList()
         );
-        dto.setTetelek(itemsDto);
+        dto.setItemList(itemsDto);
 
         PaymentItemsDto paymentDto = new PaymentItemsDto();
-        paymentDto.setItems(entity.getKifizetesek().stream()
+        paymentDto.setPaymentList(entity.getPaymentList().stream()
                 .map(p -> {
                     PaymentItemsDto.PaymentItemDto pDto = new PaymentItemsDto.PaymentItemDto();
-                    pDto.setFizetoeszkoz(p.getFizetoeszkoz());
-                    pDto.setOsszeg(p.getOsszeg());
+                    pDto.setMeansOfPayment(p.getMeansOfPayment());
+                    pDto.setAmount(p.getAmount());
                     return pDto;
                 }).toList());
-        if (!paymentDto.getItems().isEmpty()) {
-            dto.setKifizetesek(paymentDto);
+        if (!paymentDto.getPaymentList().isEmpty()) {
+            dto.setPaymentList(paymentDto);
         }
 
         ReceiptAmountsDto amounts = new ReceiptAmountsDto();
         ReceiptAmountsDto.TotalAmounts totalAmounts = new ReceiptAmountsDto.TotalAmounts();
-        totalAmounts.setNetto(entity.getVegosszegNetto());
-        totalAmounts.setAfa(entity.getVegosszegAfa());
-        totalAmounts.setBrutto(entity.getVegosszegBrutto());
-        amounts.setTotalossz(totalAmounts);
-        dto.setOsszegek(amounts);
+        totalAmounts.setNet(entity.getTotalNet());
+        totalAmounts.setVat(entity.getTotalVat());
+        totalAmounts.setGross(entity.getTotalGross());
+        amounts.setTotalAmounts(totalAmounts);
+        dto.setAmountList(amounts);
 
         return dto;
     }
