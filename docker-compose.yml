@@ -1,0 +1,22 @@
+services:
+  angular:
+    image: balma14/szamlazz:frontend-latest
+    ports:
+      - "8443:8443"
+    networks:
+      - szamlazz-network
+    depends_on:
+      - backend
+
+  backend:
+    image: balma14/szamlazz:backend-latest
+    environment:
+      - SZAMLAZZ_AGENT_ID=
+    ports:
+      - "8080:8080"
+    networks:
+      - szamlazz-network
+
+networks:
+  szamlazz-network:
+    driver: bridge
