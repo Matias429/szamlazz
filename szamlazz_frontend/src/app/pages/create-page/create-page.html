@@ -126,9 +126,7 @@
         <h3>Kifizetések</h3>
         @if(hasPayments) {
         <div class="remaining-inline" [ngClass]="{'is-zero': remainingAmount === 0, 'is-not-zero': remainingAmount !== 0}">
-          <span >
-            {{ remainingAmount }} {{ form.get('currency')?.value }} hátra
-          </span>
+          <span >{{ remainingAmount }} {{ form.get('currency')?.value }} hátra</span>
         </div>
       }
       </div>
@@ -162,8 +160,8 @@
 
       <div class="nav-bar">
         <button mat-raised-button color="primary" routerLink="/home">
-          <mat-icon>arrow_back</mat-icon>
-          Vissza
+          <mat-icon>home</mat-icon>
+          Nyugták listája
         </button>
         <button mat-raised-button 
                 color="accent" 

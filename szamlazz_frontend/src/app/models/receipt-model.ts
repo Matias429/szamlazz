@@ -45,6 +45,14 @@ export interface Details {
   note?: string;
 }
 
+export interface ReceiptBasicInfo {
+  receiptNumber: string;
+  receiptDate: string;
+  currency: string;
+  net: number;
+  gross: number;
+}
+
 export interface Receipt {
   details: Details;
   itemList: ItemList;

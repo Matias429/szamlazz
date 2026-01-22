@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Receipt } from '../models/receipt-model';
+import { Receipt, ReceiptBasicInfo } from '../models/receipt-model';
 import { Observable } from 'rxjs/internal/Observable';
 import { HttpClient } from '@angular/common/http';
 
@@ -11,8 +11,8 @@ export class PageService {
 
   constructor(private http: HttpClient) {}
 
-  getReceipts(): Observable<Receipt[]> {
-    return this.http.get<Receipt[]>(`${this.apiUrl}/getReceipts`);
+  getReceipts(): Observable<ReceiptBasicInfo[]> {
+    return this.http.get<ReceiptBasicInfo[]>(`${this.apiUrl}/getReceipts`);
   }
 
   getReceipt(callId: string): Observable<Receipt> {

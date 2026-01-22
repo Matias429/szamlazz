@@ -12,25 +12,25 @@
         <!-- Receipt Number Column -->
         <ng-container matColumnDef="receiptNumber">
           <th mat-header-cell *matHeaderCellDef>Nyugtaszám</th>
-          <td mat-cell *matCellDef="let receipt"> {{ receipt.details.receiptNumber }} </td>
+          <td mat-cell *matCellDef="let receipt"> {{ receipt.receiptNumber }} </td>
         </ng-container>
 
         <!-- Receipt Date Column -->
         <ng-container matColumnDef="receiptDate">
           <th mat-header-cell *matHeaderCellDef>Keltezés</th>
-          <td mat-cell *matCellDef="let receipt"> {{ receipt.details.receiptDate }} </td>
+          <td mat-cell *matCellDef="let receipt"> {{ receipt.receiptDate }} </td>
         </ng-container>
 
         <!-- Net Amount Column-->
-        <ng-container matColumnDef="netAmount">
+        <ng-container matColumnDef="net">
           <th mat-header-cell *matHeaderCellDef>Teljes Nettó Összeg</th>
-          <td mat-cell *matCellDef="let receipt"> {{ receipt.amountList.totalAmounts.net }} {{ receipt.details.currency }}</td>
+          <td mat-cell *matCellDef="let receipt"> {{ receipt.net }} {{ receipt.currency }}</td>
         </ng-container>
 
         <!-- Gross Amount Column-->
-        <ng-container matColumnDef="grossAmount">
+        <ng-container matColumnDef="gross">
           <th mat-header-cell *matHeaderCellDef>Teljes Bruttó Összeg</th>
-          <td mat-cell *matCellDef="let receipt"> {{ receipt.amountList.totalAmounts.gross }} {{ receipt.details.currency }}</td>
+          <td mat-cell *matCellDef="let receipt"> {{ receipt.gross }} {{ receipt.currency }}</td>
         </ng-container>
 
         <!-- Header and Row Definitions -->
