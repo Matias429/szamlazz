@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { Receipt } from '../../models/receipt-model';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { PageService } from '../page-service';
@@ -33,10 +33,8 @@ export class DetailsPage {
   readonly detailColumns = ['name', 'amount', 'netUnitPrice', 'vatRate', 'net', 'vat', 'gross'];
   readonly paymentColumns = ['paymentMethod', 'amount'];
 
-  constructor(
-    private route: ActivatedRoute,
-    private pageService: PageService
-  ) {}
+  private readonly route = inject(ActivatedRoute);
+  private readonly pageService = inject(PageService);
 
   ngOnInit(): void {
     this.callId = this.route.snapshot.paramMap.get('callId')!;

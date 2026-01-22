@@ -43,11 +43,8 @@ export class CreatePage {
 
   private fb = inject(FormBuilder);
   private snackBar = inject(MatSnackBar);
-
-  constructor(
-    private readonly router: Router,
-    private readonly pageService: PageService,
-  ) {}
+  private readonly pageService = inject(PageService);
+  private readonly router = inject(Router);
 
   readonly paymentMethodOptions = [
     'Átutalás', 'Készpénz', 'Bankkártya', 'Csekk', 'Utánvét',

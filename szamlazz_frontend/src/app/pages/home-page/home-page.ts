@@ -1,4 +1,4 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { PageService } from '../page-service';
 import { CommonModule } from '@angular/common';
 import { Receipt, ReceiptBasicInfo } from '../../models/receipt-model';
@@ -30,7 +30,8 @@ export class HomePage implements OnInit {
   receipts = signal<ReceiptBasicInfo[]>([]);
   readonly displayedColumns: string[] = ['receiptNumber', 'receiptDate', 'net', 'gross'];
 
-  constructor(private pageService: PageService, private router: Router) {}
+  private readonly pageService = inject(PageService);
+  private readonly router = inject(Router);
 
   ngOnInit(): void {
     this.pageService.getReceipts().subscribe({
