@@ -1,7 +1,8 @@
 # Számlázz.hu próbafeladat backend
 
 Ez a backend alkalmazás a **nyugta kezelő rendszer** része, amely a Számlázz.hu API-jával integrálódik.  
-A rendszer lehetővé teszi nyugták létrehozását, tárolását, lekérdezését és feldolgozását.
+A rendszer lehetővé teszi nyugták létrehozását, tárolását, lekérdezését és feldolgozását.   
+Docker image létrehozása: `./gradlew bootBuildImage`. Ez a `build.gradle` fájlban definiált néven hoz létre egy Docker image-et.
 
 ---
 

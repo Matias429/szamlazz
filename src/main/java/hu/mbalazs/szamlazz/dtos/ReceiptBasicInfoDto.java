@@ -6,6 +6,7 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class ReceiptBasicInfoDto {
+    String callId;
     String receiptNumber;
     String receiptDate;
     String currency;

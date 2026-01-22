@@ -45,7 +45,7 @@ public class ReceiptController {
     @GetMapping("/getReceipts")
     public ResponseEntity<List<ReceiptBasicInfoDto>> getReceipts() {
         List<ReceiptBasicInfoDto> receipts = persistenceService.getAllReceipts().stream()
-                .map(r -> new ReceiptBasicInfoDto(r.getDetails().getReceiptNumber(), r.getDetails().getReceiptDate(), r.getDetails().getCurrency(),
+                .map(r -> new ReceiptBasicInfoDto(r.getDetails().getCallId(), r.getDetails().getReceiptNumber(), r.getDetails().getReceiptDate(), r.getDetails().getCurrency(),
                             r.getAmountList().getTotalAmounts().getNet(), r.getAmountList().getTotalAmounts().getGross())).toList();
         return ResponseEntity.ok(receipts);
     }
