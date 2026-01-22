@@ -3,6 +3,9 @@ package hu.mbalazs.szamlazz.dtos;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
+
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
@@ -12,6 +15,8 @@ public class ReceiptAmountsDto {
     @XmlElement(name = "totalossz")
     private TotalAmounts totalAmounts;
 
+    @NoArgsConstructor
+    @AllArgsConstructor
     @Data
     @XmlAccessorType(XmlAccessType.FIELD)
     public static class TotalAmounts {

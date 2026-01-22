@@ -3,10 +3,12 @@ package hu.mbalazs.szamlazz.database.entities;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
+@NoArgsConstructor
 @Entity
 @Table(name = "item")
 public class ReceiptItemEntity {
@@ -30,6 +32,18 @@ public class ReceiptItemEntity {
 
     public void setReceipt(ReceiptEntity receipt) {
         this.receipt = receipt;
+    }
+
+    public ReceiptItemEntity(String name, Double amount, String unitOfMeasure, Double netUnitPrice,
+                             String vatRate, Double net, Double vat, Double gross) {
+        this.name = name;
+        this.amount = amount;
+        this.unitOfMeasure = unitOfMeasure;
+        this.netUnitPrice = netUnitPrice;
+        this.vatRate = vatRate;
+        this.net = net;
+        this.vat = vat;
+        this.gross = gross;
     }
 
 }

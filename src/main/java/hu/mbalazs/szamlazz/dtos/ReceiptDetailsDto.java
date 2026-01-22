@@ -3,8 +3,11 @@ package hu.mbalazs.szamlazz.dtos;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
+
+import lombok.NoArgsConstructor;
 import lombok.Data;
 
+@NoArgsConstructor
 @Data
 @XmlAccessorType(XmlAccessType.FIELD)
 public class ReceiptDetailsDto {
@@ -36,4 +39,16 @@ public class ReceiptDetailsDto {
 
     @XmlElement(name = "megjegyzes")
     private String note;
+
+    public ReceiptDetailsDto(Long id, String callId, String receiptNumber, String receiptType, Boolean isCancelled, String receiptDate,
+                             String paymentMethod, String currency) {
+        this.id = id;
+        this.callId = callId;
+        this.receiptNumber = receiptNumber;
+        this.receiptType = receiptType;
+        this.isCancelled = isCancelled;
+        this.receiptDate = receiptDate;
+        this.paymentMethod = paymentMethod;
+        this.currency = currency;
+    }
 }

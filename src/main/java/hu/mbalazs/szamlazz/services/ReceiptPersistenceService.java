@@ -3,8 +3,10 @@ package hu.mbalazs.szamlazz.services;
 import hu.mbalazs.szamlazz.database.entities.ReceiptEntity;
 import hu.mbalazs.szamlazz.database.repositories.ReceiptRepository;
 import hu.mbalazs.szamlazz.dtos.*;
+
 import jakarta.annotation.PostConstruct;
 import jakarta.transaction.Transactional;
+
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
 
@@ -64,56 +66,34 @@ public class ReceiptPersistenceService {
     private ReceiptDto entityToDtoMapper(ReceiptEntity entity) {
         ReceiptDto dto = new ReceiptDto();
 
-        ReceiptDetailsDto data = new ReceiptDetailsDto();
-        data.setId(entity.getId());
-        data.setCallId(entity.getCallId());
-        data.setReceiptNumber(entity.getReceiptNumber());
-        data.setReceiptType(entity.getReceiptType());
-        data.setIsCancelled(entity.getIsCancelled());
-        data.setReceiptDate(entity.getReceiptDate());
-        data.setPaymentMethod(entity.getPaymentMethod());
-        data.setCurrency(entity.getCurrency());
-        dto.setDetails(data);
+        ReceiptDetailsDto receiptDetails = new ReceiptDetailsDto(entity.getId(), entity.getCallId(), entity.getReceiptNumber(),
+                entity.getReceiptType(), entity.getIsCancelled(), entity.getReceiptDate(),
+                entity.getPaymentMethod(), entity.getCurrency());
+
         if (entity.getNote() != null) {
-            data.setNote(entity.getNote());
+            receiptDetails.setNote(entity.getNote());
         }
+
+        dto.setDetails(receiptDetails);
 
         ReceiptItemsDto itemsDto = new ReceiptItemsDto();
         itemsDto.setItemList(entity.getItemList().stream()
-                .map(item -> {
-                    ReceiptItemsDto.ReceiptItemDto itemDto = new ReceiptItemsDto.ReceiptItemDto();
-                    itemDto.setName(item.getName());
-                    itemDto.setAmount(item.getAmount());
-                    itemDto.setUnitOfMeasure(item.getUnitOfMeasure());
-                    itemDto.setNetUnitPrice(item.getNetUnitPrice());
-                    itemDto.setNet(item.getNet());
-                    itemDto.setVat(item.getVat());
-                    itemDto.setGross(item.getGross());
-                    itemDto.setVatRate(item.getVatRate());
-                    return itemDto;
-                }).toList()
+                .map(item -> new ReceiptItemsDto.ReceiptItemDto(item.getName(), item.getAmount(), item.getUnitOfMeasure(),
+                        item.getNetUnitPrice(), item.getVatRate(),
+                        item.getNet(), item.getVat(), item.getGross())).toList()
         );
         dto.setItemList(itemsDto);
 
         PaymentItemsDto paymentDto = new PaymentItemsDto();
         paymentDto.setPaymentList(entity.getPaymentList().stream()
-                .map(p -> {
-                    PaymentItemsDto.PaymentItemDto pDto = new PaymentItemsDto.PaymentItemDto();
-                    pDto.setMeansOfPayment(p.getMeansOfPayment());
-                    pDto.setAmount(p.getAmount());
-                    return pDto;
-                }).toList());
+                .map(p -> new PaymentItemsDto.PaymentItemDto(p.getMeansOfPayment(), p.getAmount())).toList());
         if (!paymentDto.getPaymentList().isEmpty()) {
             dto.setPaymentList(paymentDto);
         }
 
-        ReceiptAmountsDto amounts = new ReceiptAmountsDto();
-        ReceiptAmountsDto.TotalAmounts totalAmounts = new ReceiptAmountsDto.TotalAmounts();
-        totalAmounts.setNet(entity.getTotalNet());
-        totalAmounts.setVat(entity.getTotalVat());
-        totalAmounts.setGross(entity.getTotalGross());
-        amounts.setTotalAmounts(totalAmounts);
-        dto.setAmountList(amounts);
+        ReceiptAmountsDto receiptAmounts = new ReceiptAmountsDto();
+        receiptAmounts.setTotalAmounts(new ReceiptAmountsDto.TotalAmounts(entity.getTotalNet(), entity.getTotalVat(), entity.getTotalGross()));
+        dto.setAmountList(receiptAmounts);
 
         return dto;
     }

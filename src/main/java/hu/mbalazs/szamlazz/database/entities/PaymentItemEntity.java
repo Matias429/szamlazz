@@ -3,11 +3,13 @@ package hu.mbalazs.szamlazz.database.entities;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
 @Entity
+@NoArgsConstructor
 @Table(name = "payment")
 public class PaymentItemEntity {
 
@@ -24,6 +26,11 @@ public class PaymentItemEntity {
 
     public void setReceipt(ReceiptEntity receipt) {
         this.receipt = receipt;
+    }
+
+    public PaymentItemEntity(String meansOfPayment, Double amount) {
+        this.meansOfPayment = meansOfPayment;
+        this.amount = amount;
     }
 
 }

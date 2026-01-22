@@ -13,44 +13,28 @@ public class ReceiptMapperService {
 
     public ReceiptEntity toEntity(ReceiptDto dto) {
 
-        ReceiptEntity receipt = new ReceiptEntity();
-
-        receipt.setId(dto.getDetails().getId());
-        receipt.setCallId(dto.getDetails().getCallId());
-        receipt.setReceiptNumber(dto.getDetails().getReceiptNumber());
-        receipt.setReceiptType(dto.getDetails().getReceiptType());
-        receipt.setIsCancelled(dto.getDetails().getIsCancelled());
-        receipt.setReceiptDate(dto.getDetails().getReceiptDate());
-        receipt.setPaymentMethod(dto.getDetails().getPaymentMethod());
-        receipt.setCurrency(dto.getDetails().getCurrency());
-        receipt.setTotalGross(dto.getAmountList().getTotalAmounts().getGross());
-        receipt.setTotalNet(dto.getAmountList().getTotalAmounts().getNet());
-        receipt.setTotalVat(dto.getAmountList().getTotalAmounts().getVat());
+        ReceiptEntity receipt = new ReceiptEntity(dto.getDetails().getId(), dto.getDetails().getCallId(),
+                dto.getDetails().getReceiptNumber(), dto.getDetails().getReceiptType(),
+                dto.getDetails().getIsCancelled(), dto.getDetails().getReceiptDate(),
+                dto.getDetails().getPaymentMethod(), dto.getDetails().getCurrency(),
+                dto.getAmountList().getTotalAmounts().getGross(),
+                dto.getAmountList().getTotalAmounts().getNet(),
+                dto.getAmountList().getTotalAmounts().getVat());
 
         if (dto.getDetails().getNote() != null) {
             receipt.setNote(dto.getDetails().getNote());
         }
 
         for (ReceiptItemsDto.ReceiptItemDto itemDto : dto.getItemList().getItemList()) {
-            ReceiptItemEntity item = new ReceiptItemEntity();
-            item.setName(itemDto.getName());
-            item.setAmount(itemDto.getAmount());
-            item.setUnitOfMeasure(itemDto.getUnitOfMeasure());
-            item.setNetUnitPrice(itemDto.getNetUnitPrice());
-            item.setVatRate(itemDto.getVatRate());
-            item.setNet(itemDto.getNet());
-            item.setVat(itemDto.getVat());
-            item.setGross(itemDto.getGross());
-
+            ReceiptItemEntity item = new ReceiptItemEntity(itemDto.getName(), itemDto.getAmount(), itemDto.getUnitOfMeasure(),
+                    itemDto.getNetUnitPrice(), itemDto.getVatRate(),
+                    itemDto.getNet(), itemDto.getVat(), itemDto.getGross());
             receipt.addReceiptItem(item);
         }
 
         if (dto.getPaymentList() != null) {
             for (PaymentItemsDto.PaymentItemDto payDto : dto.getPaymentList().getPaymentList()) {
-                PaymentItemEntity payment = new PaymentItemEntity();
-                payment.setMeansOfPayment(payDto.getMeansOfPayment());
-                payment.setAmount(payDto.getAmount());
-
+                PaymentItemEntity payment = new PaymentItemEntity(payDto.getMeansOfPayment(), payDto.getAmount());
                 receipt.addPaymentItem(payment);
             }
         }
