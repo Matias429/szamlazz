@@ -87,13 +87,13 @@
       </div>
 
       <!-- Payments Section -->
-      @if (receipt()!.paymentList?.itemList?.length) {
-        <h3>💳 Kifizetések ({{ receipt()!.paymentList?.itemList?.length }})</h3>
+      @if (receipt()!.paymentList?.paymentList?.length) {
+        <h3>💳 Kifizetések ({{ receipt()!.paymentList?.paymentList?.length }})</h3>
         <div class="table-container">
-          <table mat-table [dataSource]="receipt()!.paymentList!.itemList!" class="mat-elevation-z8">
-            <ng-container matColumnDef="paymentMethod">
+          <table mat-table [dataSource]="receipt()!.paymentList!.paymentList!" class="mat-elevation-z8">
+            <ng-container matColumnDef="meansOfPayment">
               <th mat-header-cell *matHeaderCellDef>Fizetőeszköz</th>
-              <td mat-cell *matCellDef="let item">{{ item.paymentMethod }}</td>
+              <td mat-cell *matCellDef="let item">{{ item.meansOfPayment }}</td>
             </ng-container>
             
             <ng-container matColumnDef="amount">

@@ -29,7 +29,7 @@ export interface PaymentItem {
 }
 
 export interface PaymentList {
-  itemList: PaymentItem[];
+  paymentList: PaymentItem[];
 }
 
 export interface Details {
@@ -51,6 +51,7 @@ export interface ReceiptBasicInfo {
   currency: string;
   net: number;
   gross: number;
+  callId: string;
 }
 
 export interface Receipt {

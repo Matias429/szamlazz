@@ -1,7 +1,7 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { PageService } from '../page-service';
 import { CommonModule } from '@angular/common';
-import { Receipt, ReceiptBasicInfo } from '../../models/receipt-model';
+import { ReceiptBasicInfo } from '../../models/receipt-model';
 import { Router, RouterModule } from '@angular/router';
 
 import { MatIconModule } from '@angular/material/icon';

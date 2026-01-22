@@ -31,7 +31,7 @@ export class DetailsPage {
   receipt = signal<Receipt | null>(null);
   callId = '';
   readonly detailColumns = ['name', 'amount', 'netUnitPrice', 'vatRate', 'net', 'vat', 'gross'];
-  readonly paymentColumns = ['paymentMethod', 'amount'];
+  readonly paymentColumns = ['meansOfPayment', 'amount'];
 
   private readonly route = inject(ActivatedRoute);
   private readonly pageService = inject(PageService);
