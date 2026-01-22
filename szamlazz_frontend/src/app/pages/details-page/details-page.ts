@@ -1,27 +1,37 @@
 import { CommonModule } from '@angular/common';
 import { Component, signal } from '@angular/core';
-import { MatListModule } from '@angular/material/list';
-import { MatCardModule } from '@angular/material/card';
 import { Receipt } from '../../models/receipt-model';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { PageService } from '../page-service';
+
 import { MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { MatListModule } from '@angular/material/list';
+import { MatCardModule } from '@angular/material/card';
 
 @Component({
   selector: 'app-details',
   standalone: true,
-  imports: [CommonModule, RouterModule, MatCardModule, MatListModule, MatTableModule, MatIconModule, MatButtonModule, RouterModule],
+  imports: [
+    CommonModule, 
+    RouterModule, 
+
+    MatCardModule, 
+    MatListModule, 
+    MatTableModule, 
+    MatIconModule, 
+    MatButtonModule, 
+    RouterModule
+  ],
   templateUrl: './details-page.html',
   styleUrl: './details-page.scss',
 })
 export class DetailsPage {
   receipt = signal<Receipt | null>(null);
   callId = '';
-  detailColumns = ['name', 'amount', 'netUnitPrice', 'vatRate', 'net', 'vat', 'gross'];
-  
-  paymentColumns = ['paymentMethod', 'amount'];
+  readonly detailColumns = ['name', 'amount', 'netUnitPrice', 'vatRate', 'net', 'vat', 'gross'];
+  readonly paymentColumns = ['paymentMethod', 'amount'];
 
   constructor(
     private route: ActivatedRoute,

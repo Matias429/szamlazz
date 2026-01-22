@@ -11,27 +11,33 @@ import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-home-page',
-  imports: [CommonModule, RouterModule, MatTableModule, MatCardModule, MatSortModule, MatIconModule, MatButtonModule],
+  imports: [
+    CommonModule, 
+    RouterModule, 
+    
+    MatTableModule, 
+    MatCardModule, 
+    MatSortModule, 
+    MatIconModule, 
+    MatButtonModule
+  ],
   standalone: true,
   templateUrl: './home-page.html',
   styleUrl: './home-page.scss',
 })
 export class HomePage implements OnInit {
   receipts = signal<Receipt[]>([]);
-  displayedColumns: string[] = [
-    'receiptNumber', 'receiptDate', 'netAmount', 'grossAmount'
-  ];
+  displayedColumns: string[] = ['receiptNumber', 'receiptDate', 'netAmount', 'grossAmount'];
 
   constructor(private pageService: PageService, private router: Router) {}
 
   ngOnInit(): void {
     this.pageService.getReceipts().subscribe({
       next: (data) => {
-        console.log('Received receipts:', data);
         this.receipts.set(data);
-        console.log('Receipts:', this.receipts);
       },
       error: () => {
+        console.error('Failed to fetch receipts');
       }
     });
   }

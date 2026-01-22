@@ -125,9 +125,9 @@
         <div class="item-header">
         <h3>Kifizetések</h3>
         @if(hasPayments) {
-        <div class="total-inline">
-          <span [class]="remainingAmount > 0 ? 'positive' : 'negative'">
-            {{ remainingAmount | number:'1.2-2' }} {{ form.get('currency')?.value }} hátra
+        <div class="remaining-inline" [ngClass]="{'is-zero': remainingAmount === 0, 'is-not-zero': remainingAmount !== 0}">
+          <span >
+            {{ remainingAmount }} {{ form.get('currency')?.value }} hátra
           </span>
         </div>
       }
